@@ -1,6 +1,7 @@
 // src/app/products/[id]/page.js
 
 import Link from 'next/link';
+import Header from '../../../components/Header';
 
 const mockProducts = [
   { id: 1, name: 'Product 1', description: 'Description for Product 1' },
@@ -26,12 +27,7 @@ export default function ProductPage({ params }) {
 
   return (
     <div className="container mx-auto p-6">
-      <header className="mb-8">
-        <h1 className="text-4xl font-bold mb-4">{product.name}</h1>
-        <Link href="/">
-          <span className="text-blue-500 hover:underline">Back to Home</span>
-        </Link>
-      </header>
+      <Header />
       <div>
         <p>{product.description}</p>
       </div>
