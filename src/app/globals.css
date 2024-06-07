@@ -17,3 +17,15 @@ body {
 .product-card h2 {
   @apply text-lg font-semibold p-4;
 }
+
+@font-face {
+  font-family: 'Pilowlava';
+  src: url('/Pilowlava-Regular.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+.text-4xl {
+  font-family: 'Pilowlava', sans-serif;
+}

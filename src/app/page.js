@@ -10,12 +10,14 @@ const mockProducts = [
 export default function ProductsPage() {
   return (
     <div className="container mx-auto p-6">
+      {/* Transform into component */}
       <header className="mb-8">
         <h1 className="text-4xl font-bold mb-4">The Digital Amulet Vault</h1>
         <Link href="/products" data-test-id="products-link">
-          <span className="text-blue-500 hover:underline">Products Page</span>
+          <span className="text-blue-500 hover:underline">Products</span>
         </Link>
       </header>
+
       <div className="product-list">
         {mockProducts.map((product) => (
           <Link
