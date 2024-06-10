@@ -2,7 +2,11 @@
 
 import { Inter } from 'next/font/google';
 import './globals.css';
-import '../fontawesome';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { fas } from '@fortawesome/free-solid-svg-icons';
+import { fab } from '@fortawesome/free-brands-svg-icons';
+
+library.add(fas, fab);
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -18,18 +22,45 @@ export default function RootLayout({ children }) {
     </html>
   );
 }
--------
+
+----------------------------------------
+
 
 // src/app/products/[id]/page.js
 
 import Link from 'next/link';
 import Header from '../../../components/Header';
+import AddToCartButton from '../../../components/AddToCartButton';
 
 const mockProducts = [
-  { id: 1, name: 'Product 1', description: 'Description for Product 1' },
-  { id: 2, name: 'Product 2', description: 'Description for Product 2' },
-  { id: 3, name: 'Product 3', description: 'Description for Product 3' },
-  { id: 4, name: 'Product 4', description: 'Description for Product 4' },
+  {
+    id: 1,
+    name: 'Product 1',
+    description: 'Description for Product 1',
+    image: '/images/product1.jpg',
+    price: 10.99,
+  },
+  {
+    id: 2,
+    name: 'Product 2',
+    description: 'Description for Product 2',
+    image: '/images/product2.jpg',
+    price: 20.99,
+  },
+  {
+    id: 3,
+    name: 'Product 3',
+    description: 'Description for Product 3',
+    image: '/images/product3.jpg',
+    price: 30.99,
+  },
+  {
+    id: 4,
+    name: 'Product 4',
+    description: 'Description for Product 4',
+    image: '/images/product4.jpg',
+    price: 40.99,
+  },
 ];
 
 export function generateStaticParams() {
@@ -50,8 +81,19 @@ export default function ProductPage({ params }) {
   return (
     <div className="container mx-auto p-6">
       <Header />
-      <div>
+      <div className="product-detail">
+        <h1 className="text-2xl font-bold mb-4">{product.name}</h1>
+        <img
+          src={product.image}
+          alt={product.name}
+          className="mb-4"
+          data-test-id="product-image"
+        />
         <p>{product.description}</p>
+        <p className="text-xl font-semibold mb-4" data-test-id="product-price">
+          {product.price}
+        </p>
+        <AddToCartButton product={product} />
       </div>
     </div>
   );
@@ -137,6 +179,52 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 
 library.add(faShoppingCart);
+
+----------------------------------------
+
+// src/components/AddToCartButton.js:
+
+// src/components/AddToCartButton.js
+
+'use client';
+
+import { useState } from 'react';
+
+export default function AddToCartButton({ product }) {
+  const [quantity, setQuantity] = useState(1);
+
+  const handleAddToCart = () => {
+    // Lógica para añadir al carrito
+    console.log(`Added ${product.name} to cart with quantity: ${quantity}`);
+  };
+
+  return (
+    <div>
+      <div className="flex items-center mb-4">
+        <label htmlFor="quantity" className="mr-2">
+          Quantity:
+        </label>
+        <input
+          type="number"
+          id="quantity"
+          name="quantity"
+          min="1"
+          value={quantity}
+          onChange={(e) => setQuantity(e.target.value)}
+          className="border p-2"
+          data-test-id="product-quantity"
+        />
+      </div>
+      <button
+        onClick={handleAddToCart}
+        className="bg-blue-500 text-white px-6 py-3 rounded hover:bg-blue-600"
+        data-test-id="product-add-to-cart"
+      >
+        Add to Cart
+      </button>
+    </div>
+  );
+}
 
 ----------------------------------------
 
