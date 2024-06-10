@@ -1,3 +1,98 @@
+// src/app/layout.js:
+
+import { Inter } from 'next/font/google';
+import './globals.css';
+import '../fontawesome';
+
+const inter = Inter({ subsets: ['latin'] });
+
+export const metadata = {
+  title: 'Digital Amulet Vault',
+  description: 'Get the charms from the interwebs',
+};
+
+export default function RootLayout({ children }) {
+  return (
+    <html lang="en">
+      <body className={inter.className}>{children}</body>
+    </html>
+  );
+}
+-------
+
+// src/app/products/[id]/page.js
+
+import Link from 'next/link';
+import Header from '../../../components/Header';
+
+const mockProducts = [
+  { id: 1, name: 'Product 1', description: 'Description for Product 1' },
+  { id: 2, name: 'Product 2', description: 'Description for Product 2' },
+  { id: 3, name: 'Product 3', description: 'Description for Product 3' },
+  { id: 4, name: 'Product 4', description: 'Description for Product 4' },
+];
+
+export function generateStaticParams() {
+  return mockProducts.map((product) => ({
+    id: product.id.toString(),
+  }));
+}
+
+export default function ProductPage({ params }) {
+  const product = mockProducts.find(
+    (product) => product.id.toString() === params.id,
+  );
+
+  if (!product) {
+    return <p>Product not found</p>;
+  }
+
+  return (
+    <div className="container mx-auto p-6">
+      <Header />
+      <div>
+        <p>{product.description}</p>
+      </div>
+    </div>
+  );
+}
+
+----------------------------------------
+
+// src/app/page.js:
+
+import Link from 'next/link';
+import Header from '../components/Header';
+
+// change name of function later
+const mockProducts = [
+  { id: 1, name: 'Product 1' },
+  { id: 2, name: 'Product 2' },
+  { id: 3, name: 'Product 3' },
+  { id: 4, name: 'Product 4' },
+];
+
+export default function ProductsPage() {
+  return (
+    <div className="container mx-auto p-6">
+      <Header />
+      <div className="product-list">
+        {mockProducts.map((product) => (
+          <Link
+            href={`/products/${product.id}`}
+            key={product.id}
+            data-test-id={`product-${product.id}`}
+          >
+            <div className="product-card">
+              <h2>{product.name}</h2>
+            </div>
+          </Link>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 ----------------------------------------
 
 // src/app/globals.css:
@@ -36,109 +131,42 @@ body {
 
 ----------------------------------------
 
-// src/app/layout.js:
+// src/fontawesome.js:
 
-import { Inter } from 'next/font/google';
-import './globals.css';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 
-const inter = Inter({ subsets: ['latin'] });
-
-export const metadata = {
-  title: 'Digital Amulet Vault',
-  description: 'Get the charms from the interwebs',
-};
-
-export default function RootLayout({ children }) {
-  return (
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
-    </html>
-  );
-}
+library.add(faShoppingCart);
 
 ----------------------------------------
 
-// src/app/page.js:
+// src/components/Header.js:
+
+// src/components/Header.js
 
 import Link from 'next/link';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 
-const mockProducts = [
-  { id: 1, name: 'Product 1' },
-  { id: 2, name: 'Product 2' },
-  { id: 3, name: 'Product 3' },
-  { id: 4, name: 'Product 4' },
-];
-
-export default function ProductsPage() {
+export default function Header() {
   return (
-    <div className="container mx-auto p-6">
-      {/* Transform into component */}
-      <header className="mb-8">
+    <header className="mb-8 flex justify-between items-center">
+      <div>
         <h1 className="text-4xl font-bold mb-4">The Digital Amulet Vault</h1>
-        <Link href="/products" data-test-id="products-link">
+        <Link href="/" className="ml-4" data-test-id="products-link">
           <span className="text-blue-500 hover:underline">Products</span>
         </Link>
-      </header>
-
-      <div className="product-list">
-        {mockProducts.map((product) => (
-          <Link
-            href={`/products/${product.id}`}
-            key={product.id}
-            data-test-id={`product-${product.id}`}
-          >
-            <div className="product-card">
-              <h2>{product.name}</h2>
-            </div>
-          </Link>
-        ))}
       </div>
-    </div>
-  );
-}
-
-----------------------------------------
-
-// src/app/products/[id]/page.js:
-
-// src/app/products/[id]/page.js
-
-import Link from 'next/link';
-
-const mockProducts = [
-  { id: 1, name: 'Product 1', description: 'Description for Product 1' },
-  { id: 2, name: 'Product 2', description: 'Description for Product 2' },
-  { id: 3, name: 'Product 3', description: 'Description for Product 3' },
-  { id: 4, name: 'Product 4', description: 'Description for Product 4' },
-];
-
-export function generateStaticParams() {
-  return mockProducts.map((product) => ({
-    id: product.id.toString(),
-  }));
-}
-
-export default function ProductPage({ params }) {
-  const product = mockProducts.find(
-    (product) => product.id.toString() === params.id,
-  );
-
-  if (!product) {
-    return <p>Product not found</p>;
-  }
-
-  return (
-    <div className="container mx-auto p-6">
-      <header className="mb-8">
-        <h1 className="text-4xl font-bold mb-4">{product.name}</h1>
-        <Link href="/">
-          <span className="text-blue-500 hover:underline">Back to Home</span>
-        </Link>
-      </header>
-      <div>
-        <p>{product.description}</p>
-      </div>
-    </div>
+      <Link href="/cart" className="ml-4" data-test-id="cart-link">
+        <button className="bg-blue-500 text-white px-6 py-3 rounded hover:bg-blue-600 flex items-center justify-center">
+          <FontAwesomeIcon
+            icon={faShoppingCart}
+            className="text-white text-xl"
+          />{' '}
+          Cart
+        </button>
+      </Link>
+    </header>
   );
 }
 
