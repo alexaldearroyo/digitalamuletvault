@@ -27,8 +27,8 @@ export default function Header() {
           <FontAwesomeIcon
             icon={faShoppingCart}
             className="text-white text-xl"
-          />{' '}
-          Cart ({cartCount})
+          />
+          <span className="ml-2 text-sm">{cartCount}</span>
         </button>
       </Link>
     </header>
