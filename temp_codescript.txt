@@ -5,6 +5,7 @@ import './globals.css';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { fab } from '@fortawesome/free-brands-svg-icons';
+import { CartProvider } from '../context/CartContext';
 
 library.add(fas, fab);
 
@@ -18,13 +19,16 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <CartProvider>{children}</CartProvider>
+      </body>
     </html>
   );
 }
 
 ----------------------------------------
 
+// src/app/products/[id]/page.js:
 
 // src/app/products/[id]/page.js
 
@@ -137,6 +141,74 @@ export default function ProductsPage() {
 
 ----------------------------------------
 
+// src/app/checkout/page.js:
+
+import Link from 'next/link';
+import Header from '../../components/Header';
+
+export default function CheckoutPage() {
+  return (
+    <div className="container mx-auto p-6">
+      <Header />
+      <h1>Checkout Page</h1>
+      <p>Your order has been placed successfully!</p>
+      <Link href="/">
+        <button className="bg-blue-500 text-white px-6 py-3 rounded hover:bg-blue-600">
+          Continue Shopping
+        </button>
+      </Link>
+    </div>
+  );
+}
+
+----------------------------------------
+
+// src/app/cart/page.js:
+
+import { useCart } from '../../context/CartContext';
+import Link from 'next/link';
+import Header from '../../components/Header';
+
+export default function CartPage() {
+  const { cart, removeFromCart } = useCart();
+  const totalPrice = cart.reduce((total, product) => total + product.price * product.quantity, 0);
+
+  return (
+    <div className="container mx-auto p-6">
+      <Header />
+      <div className="cart">
+        {cart.length === 0 ? (
+          <p>No products in the cart.</p>
+        ) : (
+          cart.map((product) => (
+            <div
+              className="cart-product"
+              key={product.id}
+              data-test-id={`cart-product-${product.id}`}
+            >
+              <h2>{product.name}</h2>
+              <p data-test-id={`cart-product-quantity-${product.id}`}>{product.quantity}</p>
+              <p>{(product.price * product.quantity).toFixed(2)}</p>
+              <button
+                onClick={() => removeFromCart(product.id)}
+                data-test-id={`cart-product-remove-${product.id}`}
+              >
+                Remove
+              </button>
+            </div>
+          ))
+        )}
+        <div data-test-id="cart-total">{totalPrice.toFixed(2)}</div>
+        <Link href="/checkout">
+          <button data-test-id="cart-checkout">Checkout</button>
+        </Link>
+      </div>
+    </div>
+  );
+}
+
+----------------------------------------
+
 // src/app/globals.css:
 
 @tailwind base;
@@ -173,18 +245,7 @@ body {
 
 ----------------------------------------
 
-// src/fontawesome.js:
-
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
-
-library.add(faShoppingCart);
-
-----------------------------------------
-
 // src/components/AddToCartButton.js:
-
-// src/components/AddToCartButton.js
 
 'use client';
 
@@ -193,8 +254,14 @@ import { useState } from 'react';
 export default function AddToCartButton({ product }) {
   const [quantity, setQuantity] = useState(1);
 
+  const handleQuantityChange = (e) => {
+    const inputValue = parseInt(e.target.value, 10) || 0; // Ensure a valid number or 0
+    setQuantity(inputValue < 1 ? 1 : inputValue); // Set to 1 if less than 1
+  };
+
   const handleAddToCart = () => {
-    // Lógica para añadir al carrito
+    addToCart(product, quantity);
+    // Logic to add to cart
     console.log(`Added ${product.name} to cart with quantity: ${quantity}`);
   };
 
@@ -208,9 +275,9 @@ export default function AddToCartButton({ product }) {
           type="number"
           id="quantity"
           name="quantity"
-          min="1"
+          min="1" // Set minimum value to 1
           value={quantity}
-          onChange={(e) => setQuantity(e.target.value)}
+          onChange={handleQuantityChange} // Use the modified change handler
           className="border p-2"
           data-test-id="product-quantity"
         />
@@ -257,6 +324,56 @@ export default function Header() {
     </header>
   );
 }
+
+----------------------------------------
+
+// src/context/CartContext.js:
+
+// Context that manages the cart state globally
+`use client`;
+
+import { createContext, useContext, useState } from 'react';
+
+const CartContext = createContext();
+
+export function CartProvider({ children }) {
+  const [cart, setCart] = useState([]);
+
+  const addToCart = (product, quantity) => {
+    setCart((prevCart) => {
+      const existingProduct = prevCart.find((item) => item.id === product.id);
+      if (existingProduct) {
+        return prevCart.map((item) =>
+          item.id === product.id
+            ? { ...item, quantity: item.quantity + quantity }
+            : item,
+        );
+      }
+      return [...prevCart, { ...product, quantity }];
+    });
+  };
+
+  const removeFromCart = (productId) => {
+    setCart((prevCart) => prevCart.filter((item) => item.id !== productId));
+  };
+
+  return (
+    <CartContext.Provider value={{ cart, addToCart, removeFromCart }}>
+      {children}
+    </CartContext.Provider>
+  );
+}
+
+export const useCart = () => useContext(CartContext);
+
+----------------------------------------
+
+// src/fontawesome.js:
+
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
+
+library.add(faShoppingCart);
 
 ----------------------------------------
 

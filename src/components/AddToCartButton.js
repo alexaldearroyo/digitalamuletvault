@@ -1,11 +1,11 @@
-// src/components/AddToCartButton.js
-
 'use client';
 
 import { useState } from 'react';
+import { useCart } from '../context/CartContext';
 
 export default function AddToCartButton({ product }) {
   const [quantity, setQuantity] = useState(1);
+  const { addToCart } = useCart();
 
   const handleQuantityChange = (e) => {
     const inputValue = parseInt(e.target.value, 10) || 0; // Ensure a valid number or 0
@@ -13,6 +13,7 @@ export default function AddToCartButton({ product }) {
   };
 
   const handleAddToCart = () => {
+    addToCart(product, quantity);
     // Logic to add to cart
     console.log(`Added ${product.name} to cart with quantity: ${quantity}`);
   };
