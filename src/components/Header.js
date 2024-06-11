@@ -1,10 +1,19 @@
-// src/components/Header.js
+'use client';
 
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
+import { useCart } from '../context/CartContext';
+import { useEffect, useState } from 'react';
 
 export default function Header() {
+  const { cart } = useCart();
+  const [cartCount, setCartCount] = useState(0);
+
+  useEffect(() => {
+    setCartCount(cart.reduce((total, product) => total + product.quantity, 0));
+  }, [cart]);
+
   return (
     <header className="mb-8 flex justify-between items-center">
       <div>
@@ -19,7 +28,7 @@ export default function Header() {
             icon={faShoppingCart}
             className="text-white text-xl"
           />{' '}
-          Cart
+          Cart ({cartCount})
         </button>
       </Link>
     </header>
