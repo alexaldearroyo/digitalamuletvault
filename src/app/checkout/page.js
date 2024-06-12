@@ -2,6 +2,10 @@ import Link from 'next/link';
 import Header from '../../components/Header';
 
 const CheckoutPage = () => {
+  useEffect(() => {
+    Cookies.remove('cart'); // Clean cart's cookies when checkout is done.
+  }, []);
+
   return (
     <div className="container mx-auto p-6">
       <Header />
