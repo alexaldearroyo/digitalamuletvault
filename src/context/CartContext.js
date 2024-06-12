@@ -16,7 +16,7 @@ export function CartProvider({ children }) {
   useEffect(() => {
     // Save cart's status onto cookies whenever it changes
     if (cart.length > 0) {
-      Cookies.set('cart', JSON.stringify(cart), { expires: 7 }); // Expira en 7 días
+      Cookies.set('cart', JSON.stringify(cart), { expires: 7 });
     } else {
       Cookies.remove('cart'); // Delete cookies if cart's empty
     }

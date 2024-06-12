@@ -1,26 +1,3 @@
-// src/api/cart.js:
-
-export default function handler(req, res) {
-  if (req.method === 'POST') {
-    const { cart } = req.body;
-
-    // Validate cart data (e.g., prices)
-    const validatedCart = cart.map((item) => {
-      const product = mockProducts.find((p) => p.id === item.id);
-      return {
-        ...item,
-        price: product ? product.price : 0,
-      };
-    });
-
-    res.status(200).json({ cart: validatedCart });
-  } else {
-    res.status(405).end(); // Method Not Allowed
-  }
-}
-
-----------------------------------------
-
 // src/app/layout.js:
 
 import { Inter } from 'next/font/google';
@@ -164,19 +141,240 @@ export default function ProductsPage() {
 
 // src/app/checkout/page.js:
 
+'use client';
+
 import Link from 'next/link';
 import Header from '../../components/Header';
+import { useState, useEffect } from 'react';
+import Cookies from 'js-cookie';
+import { useRouter } from 'next/router';
 
 const CheckoutPage = () => {
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    address: '',
+    city: '',
+    postalCode: '',
+    country: '',
+    creditCard: '',
+    expirationDate: '',
+    securityCode: '',
+  });
+  const [error, setError] = useState('');
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setIsClient(true);
+    }
+  }, []);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    // Form validation
+    for (let key in formData) {
+      if (formData[key] === '') {
+        setError('All fields are required');
+        return;
+      }
+    }
+
+    // Clear the cart cookies
+    Cookies.remove('cart');
+
+    if (isClient) {
+      // Use router after checking it's client-side
+      const router = useRouter();
+      router.push('/thank-you');
+    }
+  };
+
+  const {
+    firstName,
+    lastName,
+    email,
+    address,
+    city,
+    postalCode,
+    country,
+    creditCard,
+    expirationDate,
+    securityCode,
+  } = formData;
+
   return (
     <div className="container mx-auto p-6">
       <Header />
       <main className="mt-8">
         <p className="text-lg text-gray-600 mb-6">
-          Your order has been placed successfully!
+          {/* Replace "show total" with actual total amount */}
+          Total Amount: $100
         </p>
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label>
+              First Name:
+              <input
+                type="text"
+                name="firstName"
+                value={firstName}
+                data-test-id="checkout-first-name"
+                onChange={handleChange}
+                className="border-gray-300 rounded p-2 w-full"
+              />
+            </label>
+          </div>
+
+          <div>
+            <label>
+              Last Name:
+              <input
+                type="text"
+                name="lastName"
+                value={lastName}
+                data-test-id="checkout-last-name"
+                onChange={handleChange}
+                className="border-gray-300 rounded p-2 w-full"
+              />
+            </label>
+          </div>
+
+          <div>
+            <label>
+              Email:
+              <input
+                type="email"
+                name="email"
+                value={email}
+                data-test-id="checkout-email"
+                onChange={handleChange}
+                className="border-gray-300 rounded p-2 w-full"
+              />
+            </label>
+          </div>
+
+          <div>
+            <label>
+              Address:
+              <input
+                type="text"
+                name="address"
+                value={address}
+                data-test-id="checkout-address"
+                onChange={handleChange}
+                className="border-gray-300 rounded p-2 w-full"
+              />
+            </label>
+          </div>
+
+          <div>
+            <label>
+              City:
+              <input
+                type="text"
+                name="city"
+                value={city}
+                data-test-id="checkout-city"
+                onChange={handleChange}
+                className="border-gray-300 rounded p-2 w-full"
+              />
+            </label>
+          </div>
+
+          <div>
+            <label>
+              Postal Code:
+              <input
+                type="text"
+                name="postalCode"
+                value={postalCode}
+                data-test-id="checkout-postal-code"
+                onChange={handleChange}
+                className="border-gray-300 rounded p-2 w-full"
+              />
+            </label>
+          </div>
+
+          <div>
+            <label>
+              Country:
+              <input
+                type="text"
+                name="country"
+                value={country}
+                data-test-id="checkout-country"
+                onChange={handleChange}
+                className="border-gray-300 rounded p-2 w-full"
+              />
+            </label>
+          </div>
+
+          <div>
+            <label>
+              Credit Card:
+              <input
+                type="text"
+                name="creditCard"
+                value={creditCard}
+                data-test-id="checkout-credit-card"
+                onChange={handleChange}
+                className="border-gray-300 rounded p-2 w-full"
+              />
+            </label>
+          </div>
+
+          <div>
+            <label>
+              Expiration Date:
+              <input
+                type="text"
+                name="expirationDate"
+                value={expirationDate}
+                data-test-id="checkout-expiration-date"
+                onChange={handleChange}
+                className="border-gray-300 rounded p-2 w-full"
+              />
+            </label>
+          </div>
+
+          <div>
+            <label>
+              Security Code:
+              <input
+                type="text"
+                name="securityCode"
+                value={securityCode}
+                data-test-id="checkout-security-code"
+                onChange={handleChange}
+                className="border-gray-300 rounded p-2 w-full"
+              />
+            </label>
+          </div>
+
+          {error && <p className="text-red-500">{error}</p>}
+
+          <div>
+            <button
+              type="submit"
+              data-test-id="checkout-confirm-order"
+              className="bg-blue-500 text-white px-6 py-3 rounded hover:bg-blue-600 transition duration-300"
+            >
+              Confirm Order
+            </button>
+          </div>
+        </form>
+
         <Link href="/">
-          <span className="inline-block bg-blue-500 text-white px-6 py-3 rounded hover:bg-blue-600 transition duration-300">
+          <span className="inline-block bg-blue-500 text-white px-6 py-3 rounded mt-4 hover:bg-blue-600 transition duration-300">
             Continue Shopping
           </span>
         </Link>
@@ -406,12 +604,26 @@ export default function Header() {
 // Context that manages the cart state globally
 'use client';
 
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
+import Cookies from 'js-cookie';
 
 const CartContext = createContext();
 
 export function CartProvider({ children }) {
-  const [cart, setCart] = useState([]);
+  const [cart, setCart] = useState(() => {
+    // Read Cart's cookies once the app is initialized.
+    const savedCart = Cookies.get('cart');
+    return savedCart ? JSON.parse(savedCart) : [];
+  });
+
+  useEffect(() => {
+    // Save cart's status onto cookies whenever it changes
+    if (cart.length > 0) {
+      Cookies.set('cart', JSON.stringify(cart), { expires: 7 });
+    } else {
+      Cookies.remove('cart'); // Delete cookies if cart's empty
+    }
+  }, [cart]);
 
   const addToCart = (product, quantity) => {
     setCart((prevCart) => {
