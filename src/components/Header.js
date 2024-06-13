@@ -28,7 +28,9 @@ export default function Header() {
             icon={faShoppingCart}
             className="text-white text-xl"
           />
-          <span className="ml-2 text-sm">{cartCount}</span>
+          <span className="ml-2 text-sm" data-test-id="cart-count">
+            {cartCount}
+          </span>
         </button>
       </Link>
     </header>

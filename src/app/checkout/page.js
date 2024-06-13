@@ -2,9 +2,9 @@
 
 import Link from 'next/link';
 import Header from '../../components/Header';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Cookies from 'js-cookie';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { useCart } from '../../context/CartContext';
 
 const CheckoutPage = () => {
@@ -22,22 +22,16 @@ const CheckoutPage = () => {
   });
   const [error, setError] = useState('');
 
-  // Use a state to track if the component has mounted
-  const [isMounted, setIsMounted] = useState(false);
   const { cart, setCart } = useCart();
+  const router = useRouter();
 
-  // Set the component as mounted after it's rendered on the client side
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
+  const handleChange = (event) => {
+    const { name, value } = event.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = (event) => {
+    event.preventDefault();
 
     // Form validation
     for (let key in formData) {
@@ -51,14 +45,8 @@ const CheckoutPage = () => {
     Cookies.remove('cart');
     setCart([]); // Clear the cart context
 
-    if (isMounted) {
-      // Use router after checking it's client-side
-      const router = useRouter();
-      router.push('/thank-you');
-    } else {
-      // If not mounted, provide a fallback or log for debug
-      console.error('Component not mounted');
-    }
+    // Redirect to the thank you page
+    router.push('/thankyou');
   };
 
   const {
