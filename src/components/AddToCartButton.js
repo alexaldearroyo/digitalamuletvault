@@ -37,7 +37,7 @@ export default function AddToCartButton({ product }) {
       </div>
       <button
         onClick={handleAddToCart}
-        className="bg-blue-500 text-white px-6 py-3 rounded hover:bg-blue-600"
+        className="btn-turqoise"
         data-test-id="product-add-to-cart"
       >
         Add to Cart

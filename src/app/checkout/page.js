@@ -72,7 +72,7 @@ const CheckoutPage = () => {
         <Header />
       </div>
       <div className="flex items-start justify-center mt-0 sm:mt-2">
-        <main className="mt-8 w-full max-w-lg bg-white rounded-lg shadow-md">
+        <main className="mt-8 w-full max-w-lg bg-yellow-50 bg-opacity-60 rounded-lg shadow-md">
           <div className="p-4 sm:p-6 lg:p-8">
             <p className="text-lg text-gray-600 mb-6">Total: {totalPrice}</p>
             <hr className="my-4" /> {/* Separator line */}
@@ -90,7 +90,7 @@ const CheckoutPage = () => {
                       placeholder="Enter First Name"
                       data-test-id="checkout-first-name"
                       onChange={handleChange}
-                      className="border border-gray-300 rounded-lg p-2 w-full"
+                      className="input-field"
                     />
                   </label>
                 </div>
@@ -105,7 +105,7 @@ const CheckoutPage = () => {
                       placeholder="Enter Last Name"
                       data-test-id="checkout-last-name"
                       onChange={handleChange}
-                      className="border border-gray-300 rounded-lg p-2 w-full"
+                      className="input-field"
                     />
                   </label>
                 </div>
@@ -121,7 +121,7 @@ const CheckoutPage = () => {
                     placeholder="Enter Email"
                     data-test-id="checkout-email"
                     onChange={handleChange}
-                    className="border border-gray-300 rounded-lg p-2 w-full"
+                    className="input-field"
                   />
                 </label>
               </div>
@@ -136,7 +136,7 @@ const CheckoutPage = () => {
                     placeholder="Enter Address"
                     data-test-id="checkout-address"
                     onChange={handleChange}
-                    className="border border-gray-300 rounded-lg p-2 w-full"
+                    className="input-field"
                   />
                 </label>
               </div>
@@ -151,7 +151,7 @@ const CheckoutPage = () => {
                     placeholder="Enter City"
                     data-test-id="checkout-city"
                     onChange={handleChange}
-                    className="border border-gray-300 rounded-lg p-2 w-full"
+                    className="input-field"
                   />
                 </label>
               </div>
@@ -167,7 +167,7 @@ const CheckoutPage = () => {
                       placeholder="Enter Postal Code"
                       data-test-id="checkout-postal-code"
                       onChange={handleChange}
-                      className="border border-gray-300 rounded-lg p-2 w-full"
+                      className="input-field"
                     />
                   </label>
                 </div>
@@ -182,7 +182,7 @@ const CheckoutPage = () => {
                       placeholder="Enter Country"
                       data-test-id="checkout-country"
                       onChange={handleChange}
-                      className="border border-gray-300 rounded-lg p-2 w-full"
+                      className="input-field"
                     />
                   </label>
                 </div>
@@ -200,7 +200,7 @@ const CheckoutPage = () => {
                     placeholder="Enter Credit Card"
                     data-test-id="checkout-credit-card"
                     onChange={handleChange}
-                    className="border border-gray-300 rounded-lg p-2 w-full"
+                    className="input-field"
                   />
                 </label>
               </div>
@@ -216,7 +216,7 @@ const CheckoutPage = () => {
                       placeholder="Enter Expiration Date"
                       data-test-id="checkout-expiration-date"
                       onChange={handleChange}
-                      className="border border-gray-300 rounded-lg p-2 w-full"
+                      className="input-field"
                     />
                   </label>
                 </div>
@@ -231,7 +231,7 @@ const CheckoutPage = () => {
                       placeholder="Enter Security Code"
                       data-test-id="checkout-security-code"
                       onChange={handleChange}
-                      className="border border-gray-300 rounded-lg p-2 w-full"
+                      className="input-field"
                     />
                   </label>
                 </div>
@@ -243,13 +243,13 @@ const CheckoutPage = () => {
                 <button
                   type="submit"
                   data-test-id="checkout-confirm-order"
-                  className="bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition duration-300"
+                  className="bg-teal-500 text-yellow-50 px-6 py-3 rounded-lg hover:bg-teal-600 transition duration-300"
                 >
                   Confirm Order
                 </button>
 
                 <Link href="/">
-                  <span className="inline-block bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition duration-300">
+                  <span className="inline-block bg-teal-500 text-yellow-50 px-6 py-3 rounded-lg hover:bg-teal-600 transition duration-300">
                     Continue Shopping
                   </span>
                 </Link>

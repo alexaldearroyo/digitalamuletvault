@@ -14,14 +14,14 @@ export default function CartPage() {
   return (
     <div className="container mx-auto p-6">
       <Header />
-      <div className="cart bg-white rounded-lg shadow-md p-8">
+      <div className="cart bg-yellow-50 bg-opacity-75  rounded-lg shadow-md p-8">
         {cart.length === 0 ? (
           <p className="text-center text-gray-600">No products in the cart.</p>
         ) : (
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
             {cart.map((product) => (
               <div
-                className="cart-product bg-gray-100 rounded-lg p-4 flex flex-col"
+                className="cart-product bg-red-50 rounded-lg p-4 flex flex-col shadow-md"
                 key={product.id}
                 data-test-id={`cart-product-${product.id}`}
               >
@@ -59,13 +59,8 @@ export default function CartPage() {
             </p>
             <Link href="/checkout">
               <button
-                className="btn-checkout mt-4 rounded"
+                className="btn-turqoise mt-4 rounded"
                 data-test-id="cart-checkout"
-                style={{
-                  backgroundColor: '#4CAF50',
-                  color: 'white',
-                  padding: '12px 24px',
-                }}
               >
                 Checkout
               </button>
