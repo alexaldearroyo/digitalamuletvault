@@ -15,24 +15,26 @@ export default function Header() {
   }, [cart]);
 
   return (
-    <header className="mb-8 flex justify-between items-center">
-      <div>
-        <h1 className="text-4xl font-bold mb-4">The Digital Amulet Vault</h1>
-        <Link href="/" className="ml-4" data-test-id="products-link">
-          <span className="text-blue-500 hover:underline">Products</span>
+    <header className="mb-8">
+      <div className="flex justify-between items-center">
+        <h1 className="text-4xl font-bold mb-0">The Digital Amulet Vault</h1>
+        <Link href="/cart" className="ml-4" data-test-id="cart-link">
+          <button className="bg-blue-500 text-white px-6 py-3 rounded hover:bg-blue-600 flex items-center justify-center">
+            <FontAwesomeIcon
+              icon={faShoppingCart}
+              className="text-white text-xl"
+            />
+            <span className="ml-2 text-sm" data-test-id="cart-count">
+              {cartCount}
+            </span>
+          </button>
         </Link>
       </div>
-      <Link href="/cart" className="ml-4" data-test-id="cart-link">
-        <button className="bg-blue-500 text-white px-6 py-3 rounded hover:bg-blue-600 flex items-center justify-center">
-          <FontAwesomeIcon
-            icon={faShoppingCart}
-            className="text-white text-xl"
-          />
-          <span className="ml-2 text-sm" data-test-id="cart-count">
-            {cartCount}
-          </span>
-        </button>
-      </Link>
+      <div className="bg-dark py-2 text-white rounded-lg mt-4">
+        <Link href="/" className="ml-4" data-test-id="products-link">
+          <span className="text-white-500 hover:underline">Products</span>
+        </Link>
+      </div>
     </header>
   );
 }

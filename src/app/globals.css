@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 body {
-  @apply bg-gray-100 text-gray-900;
+  @apply bg-gradient-to-b from-rose-100 to-amber-100;
 }
 
 .product-list {
@@ -28,4 +28,9 @@ body {
 
 .text-4xl {
   font-family: 'Pilowlava', sans-serif;
+}
+
+.bg-dark {
+  background-color: #333;
+  padding: 10px 20px;
 }
