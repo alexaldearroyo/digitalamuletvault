@@ -14,17 +14,25 @@ export function CartProvider({ children }) {
   });
 
   useEffect(() => {
-    // Save cart's status onto cookies whenever it changes
     if (cart.length > 0) {
-      Cookies.set('cart', JSON.stringify(cart), { expires: 7 });
+      // Set the cookie securely
+      Cookies.set('cart', JSON.stringify(cart), {
+        expires: 1, // One day
+        path: '/',
+        // secure: true, // Only over HTTPS
+        // sameSite: 'strict', // Prevent cross-site requests
+      });
     } else {
-      Cookies.remove('cart'); // Delete cookies if cart's empty
+      Cookies.remove('cart');
     }
   }, [cart]);
 
   const addToCart = (product, quantity) => {
     setCart((prevCart) => {
+      // Search if the product is already in the cart.
       const existingProduct = prevCart.find((item) => item.id === product.id);
+
+      // If the product already exists in the cart, increase its quantity.
       if (existingProduct) {
         return prevCart.map((item) =>
           item.id === product.id
@@ -32,6 +40,8 @@ export function CartProvider({ children }) {
             : item,
         );
       }
+
+      // If the product does not exist, add it to the cart.
       return [...prevCart, { ...product, quantity }];
     });
   };

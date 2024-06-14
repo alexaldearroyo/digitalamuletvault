@@ -1,169 +1,78 @@
-// src/app/layout.js:
+// src/app/cart/page.js:
 
-import { Inter } from 'next/font/google';
-import './globals.css';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { fas } from '@fortawesome/free-solid-svg-icons';
-import { fab } from '@fortawesome/free-brands-svg-icons';
-import { CartProvider } from '../context/CartContext';
+'use client';
 
-library.add(fas, fab);
-
-const inter = Inter({ subsets: ['latin'] });
-
-export const metadata = {
-  title: 'Digital Amulet Vault',
-  description: 'Get the charms from the interwebs',
-};
-
-export default function RootLayout({ children }) {
-  return (
-    <html lang="en">
-      <body className={inter.className}>
-        <CartProvider>{children}</CartProvider>
-      </body>
-    </html>
-  );
-}
-
-----------------------------------------
-
-// src/app/products/[id]/page.js
-
-import Link from 'next/link';
-import Header from '../../../components/Header';
-import AddToCartButton from '../../../components/AddToCartButton';
-
-const mockProducts = [
-  {
-    id: 1,
-    name: 'Product 1',
-    description: 'Description for Product 1',
-    image: '/images/product1.jpg',
-    price: 10.99,
-  },
-  {
-    id: 2,
-    name: 'Product 2',
-    description: 'Description for Product 2',
-    image: '/images/product2.jpg',
-    price: 20.99,
-  },
-  {
-    id: 3,
-    name: 'Product 3',
-    description: 'Description for Product 3',
-    image: '/images/product3.jpg',
-    price: 30.99,
-  },
-  {
-    id: 4,
-    name: 'Product 4',
-    description: 'Description for Product 4',
-    image: '/images/product4.jpg',
-    price: 40.99,
-  },
-];
-
-export function generateStaticParams() {
-  return mockProducts.map((product) => ({
-    id: product.id.toString(),
-  }));
-}
-
-export default function ProductPage({ params }) {
-  const product = mockProducts.find(
-    (product) => product.id.toString() === params.id,
-  );
-
-  if (!product) {
-    return <p>Product not found</p>;
-  }
-
-  return (
-    <div className="container mx-auto p-6">
-      <Header />
-      <div className="product-detail">
-        <h1 className="text-2xl font-bold mb-4">{product.name}</h1>
-        <img
-          src={product.image}
-          alt={product.name}
-          className="mb-4"
-          data-test-id="product-image"
-        />
-        <p>{product.description}</p>
-        <p className="text-xl font-semibold mb-4" data-test-id="product-price">
-          {product.price}
-        </p>
-        <AddToCartButton product={product} />
-      </div>
-    </div>
-  );
-}
-
-----------------------------------------
-
-// src/app/page.js:
-
-import Link from 'next/link';
-import Header from '../components/Header';
-
-// change name of function later
-const mockProducts = [
-  { id: 1, name: 'Product 1' },
-  { id: 2, name: 'Product 2' },
-  { id: 3, name: 'Product 3' },
-  { id: 4, name: 'Product 4' },
-];
-
-export default function ProductsPage() {
-  return (
-    <div className="container mx-auto p-6">
-      <Header />
-      <div className="product-list">
-        {mockProducts.map((product) => (
-          <Link
-            href={`/products/${product.id}`}
-            key={product.id}
-            data-test-id={`product-${product.id}`}
-          >
-            <div className="product-card">
-              <h2>{product.name}</h2>
-            </div>
-          </Link>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-----------------------------------------
-
-// src/app/thankyou/page.js:
-
+import { useCart } from '../../context/CartContext';
 import Link from 'next/link';
 import Header from '../../components/Header';
 
-const ThankYouPage = () => {
+export default function CartPage() {
+  const { cart, removeFromCart } = useCart();
+  const totalPrice = cart.reduce(
+    (total, product) => total + product.price * product.quantity,
+    0,
+  );
+
   return (
     <div className="container mx-auto p-6">
       <Header />
-      <main className="mt-8 text-center">
-        <h1 className="text-2xl font-bold mb-4">Thank you for your order</h1>
-        <p className="text-lg text-gray-600 mb-6">
-          Your order has been placed successfully.
-        </p>
-        <Link href="/">
-          <span className="inline-block bg-blue-500 text-white px-6 py-3 rounded hover:bg-blue-600 transition duration-300">
-            Continue Shopping
-          </span>
-        </Link>
-      </main>
+      <div className="cart bg-yellow-50 bg-opacity-75  rounded-lg shadow-md p-8">
+        {cart.length === 0 ? (
+          <p className="text-center text-gray-600">No products in the cart.</p>
+        ) : (
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+            {cart.map((product) => (
+              <div
+                className="cart-product bg-red-50 rounded-lg p-4 flex flex-col shadow-md"
+                key={product.id}
+                data-test-id={`cart-product-${product.id}`}
+              >
+                <div className="flex-grow">
+                  <h2 className="text-lg font-medium text-gray-700">
+                    {product.name}
+                  </h2>
+                  <p
+                    className="text-gray-500"
+                    data-test-id={`cart-product-quantity-${product.id}`}
+                  >
+                    Quantity: {product.quantity}
+                  </p>
+                </div>
+                <div className="flex-shrink mt-auto">
+                  <p className="text-gray-500">
+                    Subtotal: {(product.price * product.quantity).toFixed(2)}
+                  </p>
+                  <button
+                    className="text-red-500 hover:underline mt-2"
+                    onClick={() => removeFromCart(product.id)}
+                    data-test-id={`cart-product-remove-${product.id}`}
+                  >
+                    Remove
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+        {cart.length > 0 && (
+          <div className="mt-6">
+            <p className="text-gray-600" data-test-id="cart-total">
+              Total: {totalPrice.toFixed(2)}
+            </p>
+            <Link href="/checkout">
+              <button
+                className="btn-turqoise mt-4 rounded"
+                data-test-id="cart-checkout"
+              >
+                Checkout
+              </button>
+            </Link>
+          </div>
+        )}
+      </div>
     </div>
   );
-};
-
-export default ThankYouPage;
+}
 
 ----------------------------------------
 
@@ -243,7 +152,7 @@ const CheckoutPage = () => {
         <Header />
       </div>
       <div className="flex items-start justify-center mt-0 sm:mt-2">
-        <main className="mt-8 w-full max-w-lg bg-white rounded-lg shadow-md">
+        <main className="mt-8 w-full max-w-lg bg-yellow-50 bg-opacity-60 rounded-lg shadow-md">
           <div className="p-4 sm:p-6 lg:p-8">
             <p className="text-lg text-gray-600 mb-6">Total: {totalPrice}</p>
             <hr className="my-4" /> {/* Separator line */}
@@ -261,7 +170,7 @@ const CheckoutPage = () => {
                       placeholder="Enter First Name"
                       data-test-id="checkout-first-name"
                       onChange={handleChange}
-                      className="border border-gray-300 rounded-lg p-2 w-full"
+                      className="input-field"
                     />
                   </label>
                 </div>
@@ -276,7 +185,7 @@ const CheckoutPage = () => {
                       placeholder="Enter Last Name"
                       data-test-id="checkout-last-name"
                       onChange={handleChange}
-                      className="border border-gray-300 rounded-lg p-2 w-full"
+                      className="input-field"
                     />
                   </label>
                 </div>
@@ -292,7 +201,7 @@ const CheckoutPage = () => {
                     placeholder="Enter Email"
                     data-test-id="checkout-email"
                     onChange={handleChange}
-                    className="border border-gray-300 rounded-lg p-2 w-full"
+                    className="input-field"
                   />
                 </label>
               </div>
@@ -307,7 +216,7 @@ const CheckoutPage = () => {
                     placeholder="Enter Address"
                     data-test-id="checkout-address"
                     onChange={handleChange}
-                    className="border border-gray-300 rounded-lg p-2 w-full"
+                    className="input-field"
                   />
                 </label>
               </div>
@@ -322,7 +231,7 @@ const CheckoutPage = () => {
                     placeholder="Enter City"
                     data-test-id="checkout-city"
                     onChange={handleChange}
-                    className="border border-gray-300 rounded-lg p-2 w-full"
+                    className="input-field"
                   />
                 </label>
               </div>
@@ -338,7 +247,7 @@ const CheckoutPage = () => {
                       placeholder="Enter Postal Code"
                       data-test-id="checkout-postal-code"
                       onChange={handleChange}
-                      className="border border-gray-300 rounded-lg p-2 w-full"
+                      className="input-field"
                     />
                   </label>
                 </div>
@@ -353,7 +262,7 @@ const CheckoutPage = () => {
                       placeholder="Enter Country"
                       data-test-id="checkout-country"
                       onChange={handleChange}
-                      className="border border-gray-300 rounded-lg p-2 w-full"
+                      className="input-field"
                     />
                   </label>
                 </div>
@@ -371,7 +280,7 @@ const CheckoutPage = () => {
                     placeholder="Enter Credit Card"
                     data-test-id="checkout-credit-card"
                     onChange={handleChange}
-                    className="border border-gray-300 rounded-lg p-2 w-full"
+                    className="input-field"
                   />
                 </label>
               </div>
@@ -387,7 +296,7 @@ const CheckoutPage = () => {
                       placeholder="Enter Expiration Date"
                       data-test-id="checkout-expiration-date"
                       onChange={handleChange}
-                      className="border border-gray-300 rounded-lg p-2 w-full"
+                      className="input-field"
                     />
                   </label>
                 </div>
@@ -402,7 +311,7 @@ const CheckoutPage = () => {
                       placeholder="Enter Security Code"
                       data-test-id="checkout-security-code"
                       onChange={handleChange}
-                      className="border border-gray-300 rounded-lg p-2 w-full"
+                      className="input-field"
                     />
                   </label>
                 </div>
@@ -414,13 +323,13 @@ const CheckoutPage = () => {
                 <button
                   type="submit"
                   data-test-id="checkout-confirm-order"
-                  className="bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition duration-300"
+                  className="bg-teal-500 text-yellow-50 px-6 py-3 rounded-lg hover:bg-teal-600 transition duration-300"
                 >
                   Confirm Order
                 </button>
 
                 <Link href="/">
-                  <span className="inline-block bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition duration-300">
+                  <span className="inline-block bg-teal-500 text-yellow-50 px-6 py-3 rounded-lg hover:bg-teal-600 transition duration-300">
                     Continue Shopping
                   </span>
                 </Link>
@@ -437,89 +346,6 @@ export default CheckoutPage;
 
 ----------------------------------------
 
-// src/app/cart/page.js:
-
-'use client';
-
-import { useCart } from '../../context/CartContext';
-import Link from 'next/link';
-import Header from '../../components/Header';
-
-export default function CartPage() {
-  const { cart, removeFromCart } = useCart();
-  const totalPrice = cart.reduce(
-    (total, product) => total + product.price * product.quantity,
-    0,
-  );
-
-  return (
-    <div className="container mx-auto p-6">
-      <Header />
-      <div className="cart bg-white rounded-lg shadow-md p-8">
-        {cart.length === 0 ? (
-          <p className="text-center text-gray-600">No products in the cart.</p>
-        ) : (
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-            {cart.map((product) => (
-              <div
-                className="cart-product bg-gray-100 rounded-lg p-4 flex flex-col"
-                key={product.id}
-                data-test-id={`cart-product-${product.id}`}
-              >
-                <div className="flex-grow">
-                  <h2 className="text-lg font-medium text-gray-700">
-                    {product.name}
-                  </h2>
-                  <p
-                    className="text-gray-500"
-                    data-test-id={`cart-product-quantity-${product.id}`}
-                  >
-                    Quantity: {product.quantity}
-                  </p>
-                </div>
-                <div className="flex-shrink mt-auto">
-                  <p className="text-gray-500">
-                    Subtotal: {(product.price * product.quantity).toFixed(2)}
-                  </p>
-                  <button
-                    className="text-red-500 hover:underline mt-2"
-                    onClick={() => removeFromCart(product.id)}
-                    data-test-id={`cart-product-remove-${product.id}`}
-                  >
-                    Remove
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-        {cart.length > 0 && (
-          <div className="mt-6">
-            <p className="text-gray-600" data-test-id="cart-total">
-              Total: {totalPrice.toFixed(2)}
-            </p>
-            <Link href="/checkout">
-              <button
-                className="btn-checkout mt-4 rounded"
-                data-test-id="cart-checkout"
-                style={{
-                  backgroundColor: '#4CAF50',
-                  color: 'white',
-                  padding: '12px 24px',
-                }}
-              >
-                Checkout
-              </button>
-            </Link>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-}
-
-----------------------------------------
-
 // src/app/globals.css:
 
 @tailwind base;
@@ -527,7 +353,7 @@ export default function CartPage() {
 @tailwind utilities;
 
 body {
-  @apply bg-gray-100 text-gray-900;
+  @apply bg-gradient-to-b from-rose-100 to-amber-100;
 }
 
 .product-list {
@@ -535,7 +361,7 @@ body {
 }
 
 .product-card {
-  @apply bg-white shadow-md rounded-lg overflow-hidden transition-transform transform hover:scale-105;
+  @apply bg-yellow-50 bg-opacity-60 shadow-md rounded-lg overflow-hidden transition-transform transform hover:scale-105;
 }
 
 .product-card h2 {
@@ -553,6 +379,240 @@ body {
 .text-4xl {
   font-family: 'Pilowlava', sans-serif;
 }
+
+.bg-dark {
+  background-color: #333;
+  padding: 10px 20px;
+}
+
+.btn-burungdy {
+  @apply bg-pink-700 text-yellow-50 px-6 py-3 rounded-lg hover:bg-pink-800 transition duration-300;
+}
+
+.btn-turqoise {
+  @apply bg-teal-500 text-yellow-50 px-6 py-3 rounded-lg hover:bg-teal-600 transition duration-300;
+}
+
+.input-field {
+  @apply bg-white border border-gray-300 rounded-lg p-2 w-full;
+}
+
+.product-card canvas {
+  width: 100%;
+  height: 300px;
+}
+
+.rounded-canvas {
+  border-radius: 15px; /* Ajusta el valor según tus necesidades */
+}
+
+----------------------------------------
+
+// src/app/layout.js:
+
+import { Inter } from 'next/font/google';
+import './globals.css';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { fas } from '@fortawesome/free-solid-svg-icons';
+import { fab } from '@fortawesome/free-brands-svg-icons';
+import { CartProvider } from '../context/CartContext';
+
+library.add(fas, fab);
+
+const inter = Inter({ subsets: ['latin'] });
+
+export const metadata = {
+  title: 'Digital Amulet Vault',
+  description: 'Get the charms from the interwebs',
+};
+
+export default function RootLayout({ children }) {
+  return (
+    <html lang="en">
+      <body className={`${inter.className} min-w-screen min-h-screen`}>
+        <CartProvider>{children}</CartProvider>
+      </body>
+    </html>
+  );
+}
+
+----------------------------------------
+
+// src/app/page.js:
+
+import Link from 'next/link';
+import Header from '../components/Header';
+import ShaderImage1 from '../components/ShaderImage1';
+import ShaderImage2 from '../components/ShaderImage2';
+import ShaderImage3 from '../components/ShaderImage3';
+
+// change name of function later
+const mockProducts = [
+  { id: 2, name: 'Deep Amulet' },
+  { id: 3, name: 'Fractal Amulet' },
+  { id: 1, name: 'Smooth Amulet' },
+  { id: 4, name: 'Product 4' },
+];
+
+export default function ProductsPage() {
+  return (
+    <div className="container mx-auto p-6">
+      <Header />
+      <div className="product-list">
+        {mockProducts.map((product) => (
+          <Link
+            href={`/products/${product.id}`}
+            key={product.id}
+            data-test-id={`product-${product.id}`}
+          >
+            <div className="product-card">
+              {product.id === 1 ? (
+                <div className="rounded-lg overflow-hidden">
+                  <ShaderImage1 width={300} height={300} />
+                </div>
+              ) : product.id === 2 ? (
+                <div className="rounded-lg overflow-hidden">
+                  <ShaderImage2 width={300} height={300} />
+                </div>
+              ) : product.id === 3 ? (
+                <div className="rounded-lg overflow-hidden">
+                  <ShaderImage3 width={300} height={300} />
+                </div>
+              ) : (
+                <img
+                  src={`/images/product${product.id}.jpg`}
+                  alt={product.name}
+                  className="rounded-lg mb-4"
+                />
+              )}
+              <h2>{product.name}</h2>
+            </div>
+          </Link>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+----------------------------------------
+
+// src/app/products/[id]/page.js:
+
+// src/app/products/[id]/page.js
+
+import Link from 'next/link';
+import Header from '../../../components/Header';
+import AddToCartButton from '../../../components/AddToCartButton';
+import ShaderImage1 from '../../../components/ShaderImage1';
+import ShaderImage2 from '../../../components/ShaderImage2';
+import ShaderImage3 from '../../../components/ShaderImage3';
+
+const mockProducts = [
+  {
+    id: 1,
+    name: 'Smooth Amulet',
+    description: 'Description for Product 1',
+    image: '/images/product1.jpg',
+    price: 10.99,
+  },
+  {
+    id: 2,
+    name: 'Deep Amulet',
+    description: 'Description for Product 2',
+    image: '/images/product2.jpg',
+    price: 20.99,
+  },
+  {
+    id: 3,
+    name: 'Fractal Amulet',
+    description: 'Description for Product 3',
+    image: '/images/product3.jpg',
+    price: 30.99,
+  },
+  {
+    id: 4,
+    name: 'Product 4',
+    description: 'Description for Product 4',
+    image: '/images/product4.jpg',
+    price: 40.99,
+  },
+];
+
+export function generateStaticParams() {
+  return mockProducts.map((product) => ({
+    id: product.id.toString(),
+  }));
+}
+
+export default function ProductPage({ params }) {
+  const product = mockProducts.find(
+    (product) => product.id.toString() === params.id,
+  );
+
+  if (!product) {
+    return <p>Product not found</p>;
+  }
+
+  return (
+    <div className="container mx-auto p-6">
+      <Header />
+      <div className="product-detail">
+        <h1 className="text-2xl font-bold mb-4">{product.name}</h1>
+        {product.id === 1 ? (
+          <div className="rounded-lg overflow-hidden mb-4">
+            <ShaderImage1 width={300} height={300} />
+          </div>
+        ) : product.id === 2 ? (
+          <div className="rounded-lg overflow-hidden mb-4">
+            <ShaderImage2 width={300} height={300} />
+          </div>
+        ) : product.id === 3 ? (
+          <div className="rounded-lg overflow-hidden mb-4">
+            <ShaderImage3 width={300} height={300} />
+          </div>
+        ) : (
+          <img
+            src={product.image}
+            alt={product.name}
+            className="rounded-lg mb-4"
+            data-test-id="product-image"
+          />
+        )}
+        <p>{product.description}</p>
+        <p className="text-xl font-semibold mb-4" data-test-id="product-price">
+          {product.price}
+        </p>
+        <AddToCartButton product={product} />
+      </div>
+    </div>
+  );
+}
+
+----------------------------------------
+
+// src/app/thankyou/page.js:
+
+import Link from 'next/link';
+import Header from '../../components/Header';
+
+const ThankYouPage = () => {
+  return (
+    <div className="container mx-auto p-6">
+      <Header />
+      <main className="mt-8 text-center">
+        <h1 className="text-2xl font-bold mb-4">Thank you for your order</h1>
+        <p className="text-lg text-gray-600 mb-6">
+          Your order has been placed successfully.
+        </p>
+        <Link href="/">
+          <span className="btn-turqoise">Continue Shopping</span>
+        </Link>
+      </main>
+    </div>
+  );
+};
+
+export default ThankYouPage;
 
 ----------------------------------------
 
@@ -597,7 +657,7 @@ export default function AddToCartButton({ product }) {
       </div>
       <button
         onClick={handleAddToCart}
-        className="bg-blue-500 text-white px-6 py-3 rounded hover:bg-blue-600"
+        className="btn-turqoise"
         data-test-id="product-add-to-cart"
       >
         Add to Cart
@@ -627,24 +687,32 @@ export default function Header() {
   }, [cart]);
 
   return (
-    <header className="mb-8 flex justify-between items-center">
-      <div>
-        <h1 className="text-4xl font-bold mb-4">The Digital Amulet Vault</h1>
-        <Link href="/" className="ml-4" data-test-id="products-link">
-          <span className="text-blue-500 hover:underline">Products</span>
+    <header className="mb-8">
+      <div className="flex justify-between items-center">
+        <h1 className="text-4xl sm:text-3xl font-bold mb-0">
+          The Digital Amulet Vault
+        </h1>
+        <Link href="/cart" className="ml-4" data-test-id="cart-link">
+          <button className="bg-teal-500 text-yellow-50 px-6 py-3 rounded hover:bg-teal-600 flex items-center justify-center">
+            <FontAwesomeIcon
+              icon={faShoppingCart}
+              className="text-yellow-50 text-xl"
+            />
+            <span className="ml-2 text-sm" data-test-id="cart-count">
+              {cartCount}
+            </span>
+          </button>
         </Link>
       </div>
-      <Link href="/cart" className="ml-4" data-test-id="cart-link">
-        <button className="bg-blue-500 text-white px-6 py-3 rounded hover:bg-blue-600 flex items-center justify-center">
-          <FontAwesomeIcon
-            icon={faShoppingCart}
-            className="text-white text-xl"
-          />
-          <span className="ml-2 text-sm" data-test-id="cart-count">
-            {cartCount}
-          </span>
-        </button>
-      </Link>
+      <div className="bg-dark py-2 text-white rounded-lg mt-4">
+        <Link
+          href="/"
+          className="ml-3 text-yellow-500 hover:text-yellow-50 no-underline"
+          data-test-id="products-link"
+        >
+          <span>Products</span>
+        </Link>
+      </div>
     </header>
   );
 }
@@ -669,11 +737,16 @@ export function CartProvider({ children }) {
   });
 
   useEffect(() => {
-    // Save cart's status onto cookies whenever it changes
     if (cart.length > 0) {
-      Cookies.set('cart', JSON.stringify(cart), { expires: 7 });
+      // Set the cookie securely
+      Cookies.set('cart', JSON.stringify(cart), {
+        expires: 1, // One day
+        path: '/',
+        // secure: true, // Only over HTTPS
+        // sameSite: 'strict', // Prevent cross-site requests
+      });
     } else {
-      Cookies.remove('cart'); // Delete cookies if cart's empty
+      Cookies.remove('cart');
     }
   }, [cart]);
 
@@ -703,15 +776,6 @@ export function CartProvider({ children }) {
 }
 
 export const useCart = () => useContext(CartContext);
-
-----------------------------------------
-
-// src/fontawesome.js:
-
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
-
-library.add(faShoppingCart);
 
 ----------------------------------------
 
