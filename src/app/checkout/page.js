@@ -3,9 +3,9 @@
 import Link from 'next/link';
 import Header from '../../components/Header';
 import { useState } from 'react';
-import Cookies from 'js-cookie';
 import { useRouter } from 'next/navigation';
 import { useCart } from '../../context/CartContext';
+import { removeCartFromCookies } from '../../utils/cookies';
 
 const CheckoutPage = () => {
   const [formData, setFormData] = useState({
@@ -42,7 +42,7 @@ const CheckoutPage = () => {
     }
 
     // Clear the cart cookies and context
-    Cookies.remove('cart');
+    removeCartFromCookies();
     setCart([]); // Clear the cart context
 
     // Redirect to the thank you page

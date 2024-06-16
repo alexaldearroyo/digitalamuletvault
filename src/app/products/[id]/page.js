@@ -6,7 +6,7 @@ import AddToCartButton from '../../../components/AddToCartButton';
 import ShaderImage1 from '../../../components/ShaderImage1';
 import ShaderImage2 from '../../../components/ShaderImage2';
 import ShaderImage3 from '../../../components/ShaderImage3';
-import ShaderImage3 from '../../../components/ShaderImage4';
+import ShaderImage4 from '../../../components/ShaderImage4';
 
 const mockProducts = [
   {
