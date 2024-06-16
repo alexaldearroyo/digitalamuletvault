@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useCart } from '../context/CartContext';
+import { TextField, Button } from '@mui/material';
 
 export default function AddToCartButton({ product }) {
   const [quantity, setQuantity] = useState(1);
@@ -14,30 +15,28 @@ export default function AddToCartButton({ product }) {
 
   const handleAddToCart = () => {
     addToCart(product, quantity);
-    // Logic to add to cart
-    console.log(`Added ${product.name} to cart with quantity: ${quantity}`);
   };
 
   return (
     <div>
-      <div className="flex items-center mb-4">
-        <label htmlFor="quantity" className="mr-2">
-          Quantity:
-        </label>
-        <input
+      <div className="flex items-center mt-5 mb-4">
+        <TextField
           type="number"
           id="quantity"
           name="quantity"
-          min="1" // Set minimum value to 1
+          label="Quantity"
+          variant="outlined"
+          size="small"
           value={quantity}
-          onChange={handleQuantityChange} // Use the modified change handler
-          className="border p-2"
+          onChange={handleQuantityChange}
+          inputProps={{ min: 1 }}
           data-test-id="product-quantity"
+          sx={{ marginRight: '1rem', width: '100px', backgroundColor: 'white' }}
         />
       </div>
       <button
         onClick={handleAddToCart}
-        className="btn-turqoise"
+        className="btn-turqoise mt-5"
         data-test-id="product-add-to-cart"
       >
         Add to Cart

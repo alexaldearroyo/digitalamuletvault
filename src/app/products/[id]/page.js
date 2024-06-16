@@ -57,37 +57,43 @@ export default function ProductPage({ params }) {
   return (
     <div className="container mx-auto p-6">
       <Header />
-      <div className="product-detail">
-        <h1 className="text-2xl font-bold mb-4">{product.name}</h1>
+      <div className="rounded-lg bg-yellow-50 bg-opacity-60 overflow-hidden shadow-md p-6 flex">
         {product.id === 1 ? (
-          <div className="rounded-lg overflow-hidden mb-4">
+          <div className="mr-8">
             <ShaderImage1 width={300} height={300} />
           </div>
         ) : product.id === 2 ? (
-          <div className="rounded-lg overflow-hidden mb-4">
+          <div className="mr-8">
             <ShaderImage2 width={300} height={300} />
           </div>
         ) : product.id === 3 ? (
-          <div className="rounded-lg overflow-hidden mb-4">
+          <div className="mr-8">
             <ShaderImage3 width={300} height={300} />
           </div>
         ) : product.id === 4 ? (
-          <div className="rounded-lg overflow-hidden mb-4">
+          <div className="mr-8">
             <ShaderImage4 width={300} height={300} />
           </div>
         ) : (
           <img
             src={product.image}
             alt={product.name}
-            className="rounded-lg mb-4"
+            className="mr-8"
+            style={{ width: '300px', height: '300px', objectFit: 'cover' }}
             data-test-id="product-image"
           />
         )}
-        <p>{product.description}</p>
-        <p className="text-xl font-semibold mb-4" data-test-id="product-price">
-          {product.price}
-        </p>
-        <AddToCartButton product={product} />
+        <div>
+          <h1 className="text-2xl font-bold mb-4">{product.name}</h1>
+          <p
+            className="text-xl font-semibold mb-4"
+            data-test-id="product-price"
+          >
+            ${product.price.toFixed(2)}
+          </p>
+          <p className="mb-8">{product.description}</p>
+          <AddToCartButton product={product} />
+        </div>
       </div>
     </div>
   );
