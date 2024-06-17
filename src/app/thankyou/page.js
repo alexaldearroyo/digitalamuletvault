@@ -6,6 +6,7 @@ const ThankYouPage = () => {
     <div>
       <Head>
         <title>Thank You</title>
+        <meta name="description" content="Thank you page after checkout." />
       </Head>
       <div className="container mx-auto p-6">
         <Header />

@@ -18,6 +18,10 @@ export default function ProductsPage() {
     <div>
       <Head>
         <title>Products Page</title>
+        <meta
+          name="description"
+          content="Page showing information of selected product."
+        />
       </Head>
       <div className="container mx-auto p-6">
         <Header />

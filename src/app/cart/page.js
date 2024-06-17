@@ -17,6 +17,10 @@ export default function CartPage() {
     <div>
       <Head>
         <title>Cart</title>
+        <meta
+          name="description"
+          content="Cart page showing products ready to be checked out."
+        />
       </Head>
       <div className="container mx-auto p-6">
         <Header />

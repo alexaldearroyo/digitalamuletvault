@@ -70,6 +70,10 @@ const CheckoutPage = () => {
     <div>
       <Head>
         <title>Checkout Page</title>
+        <meta
+          name="description"
+          content="Checkout page showing products set to be purchased."
+        />
       </Head>
       <div className="min-h-screen py-6 sm:py-12">
         <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">

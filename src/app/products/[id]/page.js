@@ -58,6 +58,7 @@ export default function ProductPage({ params }) {
     <div>
       <Head>
         <title>Product Info</title>
+        <meta name="description" content="Overview of all available amulets." />
       </Head>
       <div className="container mx-auto p-6">
         <Header />
