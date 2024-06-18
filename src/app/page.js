@@ -1,5 +1,5 @@
 import Link from 'next/link';
-// import Head from 'next/head';
+import Head from 'next/head';
 import Header from '../components/Header';
 import ShaderImage1 from '../components/ShaderImage1';
 import ShaderImage2 from '../components/ShaderImage2';
@@ -20,13 +20,13 @@ export default async function ProductsPage() {
 
   return (
     <div>
-      {/* <Head>
+      <Head>
         <title>Products Page</title>
         <meta
           name="description"
           content="Page showing information of selected product."
         />
-      </Head> */}
+      </Head>
       <div className="container mx-auto p-6">
         <Header />
         <div className="product-list">

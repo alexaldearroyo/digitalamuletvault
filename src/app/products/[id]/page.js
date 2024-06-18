@@ -1,7 +1,7 @@
 // src/app/products/[id]/page.js
 
 import Link from 'next/link';
-// import Head from 'next/head';
+import Head from 'next/head';
 import Header from '../../../components/Header';
 import AddToCartButton from '../../../components/AddToCartButton';
 import ShaderImage1 from '../../../components/ShaderImage1';
@@ -48,11 +48,6 @@ export async function generateStaticParams() {
   }));
 }
 
-export const metadata = {
-  title: 'Product Info',
-  description: 'Overview of all available amulets.',
-};
-
 export default async function ProductPage({ params }) {
   const product = await getProductById(Number(params.id));
 
@@ -62,10 +57,10 @@ export default async function ProductPage({ params }) {
 
   return (
     <div>
-      {/* <Head>
+      <Head>
         <title>Product Info</title>
         <meta name="description" content="Overview of all available amulets." />
-      </Head> */}
+      </Head>
       <div className="container mx-auto p-6">
         <Header />
         <div className="rounded-lg bg-yellow-50 bg-opacity-60 overflow-hidden shadow-md p-6 flex">
