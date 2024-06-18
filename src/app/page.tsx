@@ -6,17 +6,11 @@ import ShaderImage2 from '../components/ShaderImage2';
 import ShaderImage3 from '../components/ShaderImage3';
 import ShaderImage4 from '../components/ShaderImage4';
 import { getProducts } from '../databases/products';
-
-// change name of function later
-// const mockProducts = [
-//   { id: 2, name: 'Deep Amulet' },
-//   { id: 4, name: 'Spherical Amulet' },
-//   { id: 3, name: 'Fractal Amulet' },
-//   { id: 1, name: 'Smooth Amulet' },
-// ];
+import { Product } from '../types/Product';
+import React from 'react';
 
 export default async function ProductsPage() {
-  const products = await getProducts();
+  const products: Product[] = await getProducts();
 
   return (
     <div>

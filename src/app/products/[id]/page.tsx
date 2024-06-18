@@ -9,6 +9,9 @@ import ShaderImage2 from '../../../components/ShaderImage2';
 import ShaderImage3 from '../../../components/ShaderImage3';
 import ShaderImage4 from '../../../components/ShaderImage4';
 import { getProductById, getProducts } from '../../../databases/products';
+import { Product } from '../../../types/Product';
+import { Params } from '../../../types/Params';
+import React from 'react';
 
 // const mockProducts = [
 //   {
@@ -42,14 +45,14 @@ import { getProductById, getProducts } from '../../../databases/products';
 // ];
 
 export async function generateStaticParams() {
-  const products = await getProducts();
+  const products: Product[] = await getProducts();
   return products.map((product) => ({
     id: product.id.toString(),
   }));
 }
 
-export default async function ProductPage({ params }) {
-  const product = await getProductById(Number(params.id));
+export default async function ProductPage({ params }: { params: Params }) {
+  const product: Product | null = await getProductById(Number(params.id));
 
   if (!product) {
     return <p>Product not found</p>;
@@ -82,7 +85,7 @@ export default async function ProductPage({ params }) {
           )}
           {!product.shaderPath && (
             <img
-              src={product.image}
+              // src={product.image}
               alt={product.name}
               className="mr-8"
               style={{ width: '300px', height: '300px', objectFit: 'cover' }}
