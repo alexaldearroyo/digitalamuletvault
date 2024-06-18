@@ -3,6 +3,7 @@
 import { useCart } from '../../context/CartContext';
 import Link from 'next/link';
 import Header from '../../components/Header';
+// import Head from 'next/head';
 
 export default function CartPage() {
   const { cart, removeFromCart } = useCart(); // Import the methods and data from the context of the cart.
@@ -15,13 +16,13 @@ export default function CartPage() {
 
   return (
     <div>
-      <Head>
+      {/* <Head>
         <title>Cart</title>
         <meta
           name="description"
           content="Cart page showing products ready to be checked out."
         />
-      </Head>
+      </Head> */}
       <div className="container mx-auto p-6">
         <Header />
         <div className="cart bg-yellow-50 bg-opacity-75  rounded-lg shadow-md p-8">
