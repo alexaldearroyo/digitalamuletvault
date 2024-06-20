@@ -12,6 +12,7 @@ import { getProductById, getProducts } from '../../../databases/products';
 import { Product } from '../../../types/Product';
 import { Params } from '../../../types/Params';
 import React from 'react';
+import Image from 'next/image';
 
 // const mockProducts = [
 //   {
@@ -84,12 +85,13 @@ export default async function ProductPage({ params }: { params: Params }) {
             </div>
           )}
           {!product.shaderPath && (
-            <img
+            <Image
               // src={product.image}
               alt={product.name}
               className="mr-8"
               style={{ width: '300px', height: '300px', objectFit: 'cover' }}
               data-test-id="product-image"
+              src={''}
             />
           )}
           <div>
