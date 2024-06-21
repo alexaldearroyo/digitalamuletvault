@@ -41,13 +41,13 @@ export default function AddToCartButton({ product }) {
       >
         Add to Cart
       </button>
-      <button
+      {/* <button
         onClick={handleAddToCart}
         className="btn-turqoise mt-5"
         data-test-id="update-quantity"
       >
         Update Quantity
-      </button>
+      </button> */}
     </div>
   );
 }

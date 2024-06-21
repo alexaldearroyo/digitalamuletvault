@@ -55,3 +55,11 @@ body {
 .rounded-canvas {
   border-radius: 15px;
 }
+
+/* globals.css o Footer.css */
+footer {
+  /* background-color: #333; */
+  color: #333;
+  text-align: center;
+  padding: 1rem 0;
+}

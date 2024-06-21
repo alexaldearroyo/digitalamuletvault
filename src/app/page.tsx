@@ -63,3 +63,4 @@ export default async function ProductsPage() {
     </div>
   );
 }
+// Me sumo a la petición'
