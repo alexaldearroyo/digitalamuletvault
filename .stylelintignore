@@ -1,0 +1,6 @@
+echo "src/**/*.js" >> .stylelintignore
+echo "src/**/*.tsx" >> .stylelintignore
+echo "tailwind.config.js" >> .stylelintignore
+echo "next.config.js" >> .stylelintignore
+echo "*.config.js" >> .stylelintignore
+echo "*.json" >> .stylelintignore

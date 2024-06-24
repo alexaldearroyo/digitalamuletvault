@@ -19,7 +19,7 @@ body {
 }
 
 @font-face {
-  font-family: 'Pilowlava';
+  font-family: Pilowlava;
   src: url('/Pilowlava-Regular.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;
@@ -27,7 +27,7 @@ body {
 }
 
 .text-4xl {
-  font-family: 'Pilowlava', sans-serif;
+  font-family: Pilowlava, sans-serif;
 }
 
 .bg-dark {

@@ -10,7 +10,8 @@
     "migrate": "ley --require tsx/cjs",
     "test": "pnpm run test:jest && pnpm run test:playwright",
     "test:jest": "jest --config jest.config.js",
-    "test:playwright": "pnpm exec playwright test"
+    "test:playwright": "pnpm exec playwright test",
+    "lint:styles": "stylelint '**/*.{css,scss,less}'"
   },
   "dependencies": {
     "@emotion/react": "^11.11.4",

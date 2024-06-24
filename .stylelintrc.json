@@ -1,0 +1,20 @@
+{
+  "extends": "stylelint-config-standard",
+  "rules": {
+    "at-rule-no-unknown": [
+      true,
+      {
+        "ignoreAtRules": [
+          "tailwind",
+          "apply",
+          "variants",
+          "responsive",
+          "screen"
+        ]
+      }
+    ],
+    "block-no-empty": null,
+    "unit-allowed-list": ["em", "rem", "s", "px", "%"],
+    "font-family-name-quotes": "always-where-required"
+  }
+}
