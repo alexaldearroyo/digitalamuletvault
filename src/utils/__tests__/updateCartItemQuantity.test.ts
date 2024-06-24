@@ -1,5 +1,3 @@
-// src/utils/__tests__/updateCartItemQuantity.test.ts
-
 import { getCartFromCookies, saveCartToCookies } from '../cookies';
 
 const updateCartItemQuantity = (id: number, quantity: number) => {

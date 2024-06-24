@@ -1,5 +1,3 @@
-// src/utils/__tests__/cartSum.test.ts
-
 const calculateCartTotal = (cart: { price: number; quantity: number }[]) => {
   return cart.reduce(
     (total, product) => total + product.price * product.quantity,

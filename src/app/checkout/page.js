@@ -1,12 +1,18 @@
 'use client';
 
 import Link from 'next/link';
-import Head from 'next/head';
+// import Head from 'next/head';
+import { Metadata } from 'next';
 import Header from '../../components/Header';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useCart } from '../../context/CartContext';
 import { removeCartFromCookies } from '../../utils/cookies';
+
+export const metadata: Metadata = {
+  title: 'Checkout Page',
+  description: 'Checkout page showing products set to be purchased.',
+};
 
 const CheckoutPage = () => {
   const [formData, setFormData] = useState({
@@ -69,13 +75,13 @@ const CheckoutPage = () => {
 
   return (
     <div>
-      <Head>
+      {/* <Head>
         <title>Checkout Page</title>
         <meta
           name="description"
           content="Checkout page showing products set to be purchased."
         />
-      </Head>
+      </Head> */}
       <div className="min-h-screen py-6 sm:py-12">
         <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
           <Header />

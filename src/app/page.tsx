@@ -1,5 +1,6 @@
 import Link from 'next/link';
-import Head from 'next/head';
+// import Head from 'next/head';
+import { Metadata } from 'next';
 import Header from '../components/Header';
 import ShaderImage1 from '../components/ShaderImage1';
 import ShaderImage2 from '../components/ShaderImage2';
@@ -9,18 +10,23 @@ import { getProducts } from '../databases/products';
 import { Product } from '../types/Product';
 import React from 'react';
 
+export const metadata: Metadata = {
+  title: 'Products Page',
+  description: 'Page showing information of selected product',
+};
+
 export default async function ProductsPage() {
   const products: Product[] = await getProducts();
 
   return (
     <div>
-      <Head>
+      {/* <Head>
         <title>Products Page</title>
         <meta
           name="description"
           content="Page showing information of selected product."
         />
-      </Head>
+      </Head> */}
       <div className="container mx-auto p-6">
         <Header />
         <div className="product-list">
@@ -63,4 +69,3 @@ export default async function ProductsPage() {
     </div>
   );
 }
-// Me sumo a la petición'

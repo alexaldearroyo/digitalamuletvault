@@ -95,54 +95,316 @@ export default function CartPage() {
 
 ----------------------------------------
 
-// src/components/AddToCartButton.js:
+// src/app/checkout/page.js:
 
 'use client';
 
+import Link from 'next/link';
+import Head from 'next/head';
+import Header from '../../components/Header';
 import { useState } from 'react';
-import { useCart } from '../context/CartContext';
-import { TextField, Button } from '@mui/material';
+import { useRouter } from 'next/navigation';
+import { useCart } from '../../context/CartContext';
+import { removeCartFromCookies } from '../../utils/cookies';
 
-export default function AddToCartButton({ product }) {
-  const [quantity, setQuantity] = useState(1);
-  const { addToCart } = useCart();
+const CheckoutPage = () => {
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    address: '',
+    city: '',
+    postalCode: '',
+    country: '',
+    creditCard: '',
+    expirationDate: '',
+    securityCode: '',
+  });
+  const [error, setError] = useState('');
 
-  const handleQuantityChange = (e) => {
-    const inputValue = parseInt(e.target.value, 10) || 0; // Ensure a valid number or 0
-    setQuantity(inputValue < 1 ? 1 : inputValue); // Set to 1 if less than 1
+  const { cart, setCart } = useCart();
+  const router = useRouter();
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormData({ ...formData, [name]: value });
   };
 
-  const handleAddToCart = () => {
-    addToCart(product, quantity);
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    // Form validation
+    for (let key in formData) {
+      if (formData[key] === '') {
+        setError('All fields are required');
+        return;
+      }
+    }
+
+    // Clear the cart cookies and context
+    removeCartFromCookies();
+    setCart([]); // Clear the cart context
+
+    // Redirect to the thank you page
+    router.push('/thankyou');
   };
+
+  const {
+    firstName,
+    lastName,
+    email,
+    address,
+    city,
+    postalCode,
+    country,
+    creditCard,
+    expirationDate,
+    securityCode,
+  } = formData;
+
+  const totalPrice = cart
+    .reduce((total, product) => total + product.price * product.quantity, 0)
+    .toFixed(2);
 
   return (
     <div>
-      <div className="flex items-center mt-5 mb-4">
-        <TextField
-          type="number"
-          id="quantity"
-          name="quantity"
-          label="Quantity"
-          variant="outlined"
-          size="small"
-          value={quantity}
-          onChange={handleQuantityChange}
-          inputProps={{ min: 1 }}
-          data-test-id="product-quantity"
-          sx={{ marginRight: '1rem', width: '100px', backgroundColor: 'white' }}
+      <Head>
+        <title>Checkout Page</title>
+        <meta
+          name="description"
+          content="Checkout page showing products set to be purchased."
         />
+      </Head>
+      <div className="min-h-screen py-6 sm:py-12">
+        <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
+          <Header />
+        </div>
+        <div className="flex items-start justify-center mt-0 sm:mt-2">
+          <main className="mt-8 w-full max-w-lg bg-yellow-50 bg-opacity-60 rounded-lg shadow-md">
+            <div className="p-4 sm:p-6 lg:p-8">
+              <p className="text-lg text-gray-600 mb-6">Total: {totalPrice}</p>
+              <hr className="my-4" /> {/* Separator line */}
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <h2 className="text-xl font-semibold">Shipping Address</h2>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label>
+                      First Name:
+                      <input
+                        type="text"
+                        name="firstName"
+                        value={firstName}
+                        placeholder="Enter First Name"
+                        data-test-id="checkout-first-name"
+                        onChange={handleChange}
+                        className="input-field"
+                      />
+                    </label>
+                  </div>
+
+                  <div>
+                    <label>
+                      Last Name:
+                      <input
+                        type="text"
+                        name="lastName"
+                        value={lastName}
+                        placeholder="Enter Last Name"
+                        data-test-id="checkout-last-name"
+                        onChange={handleChange}
+                        className="input-field"
+                      />
+                    </label>
+                  </div>
+                </div>
+
+                <div>
+                  <label>
+                    Email:
+                    <input
+                      type="email"
+                      name="email"
+                      value={email}
+                      placeholder="Enter Email"
+                      data-test-id="checkout-email"
+                      onChange={handleChange}
+                      className="input-field"
+                    />
+                  </label>
+                </div>
+
+                <div>
+                  <label>
+                    Address:
+                    <input
+                      type="text"
+                      name="address"
+                      value={address}
+                      placeholder="Enter Address"
+                      data-test-id="checkout-address"
+                      onChange={handleChange}
+                      className="input-field"
+                    />
+                  </label>
+                </div>
+
+                <div>
+                  <label>
+                    City:
+                    <input
+                      type="text"
+                      name="city"
+                      value={city}
+                      placeholder="Enter City"
+                      data-test-id="checkout-city"
+                      onChange={handleChange}
+                      className="input-field"
+                    />
+                  </label>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label>
+                      Postal Code:
+                      <input
+                        type="text"
+                        name="postalCode"
+                        value={postalCode}
+                        placeholder="Enter Postal Code"
+                        data-test-id="checkout-postal-code"
+                        onChange={handleChange}
+                        className="input-field"
+                      />
+                    </label>
+                  </div>
+
+                  <div>
+                    <label>
+                      Country:
+                      <input
+                        type="text"
+                        name="country"
+                        value={country}
+                        placeholder="Enter Country"
+                        data-test-id="checkout-country"
+                        onChange={handleChange}
+                        className="input-field"
+                      />
+                    </label>
+                  </div>
+                </div>
+
+                <h2 className="text-xl font-semibold">Payment Information</h2>
+
+                <div>
+                  <label>
+                    Credit Card:
+                    <input
+                      type="text"
+                      name="creditCard"
+                      value={creditCard}
+                      placeholder="Enter Credit Card"
+                      data-test-id="checkout-credit-card"
+                      onChange={handleChange}
+                      className="input-field"
+                    />
+                  </label>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4 mb-8">
+                  <div>
+                    <label>
+                      Expiration Date:
+                      <input
+                        type="text"
+                        name="expirationDate"
+                        value={expirationDate}
+                        placeholder="Enter Expiration Date"
+                        data-test-id="checkout-expiration-date"
+                        onChange={handleChange}
+                        className="input-field"
+                      />
+                    </label>
+                  </div>
+
+                  <div>
+                    <label>
+                      Security Code:
+                      <input
+                        type="text"
+                        name="securityCode"
+                        value={securityCode}
+                        placeholder="Enter Security Code"
+                        data-test-id="checkout-security-code"
+                        onChange={handleChange}
+                        className="input-field"
+                      />
+                    </label>
+                  </div>
+                </div>
+
+                {error && <p className="text-red-500">{error}</p>}
+
+                <div className="flex justify-center space-x-4 pt-5 pb-4">
+                  <button
+                    type="submit"
+                    data-test-id="checkout-confirm-order"
+                    className="bg-teal-500 text-yellow-50 px-6 py-3 rounded-lg hover:bg-teal-600 transition duration-300"
+                  >
+                    Confirm Order
+                  </button>
+
+                  <Link href="/">
+                    <span className="inline-block bg-teal-500 text-yellow-50 px-6 py-3 rounded-lg hover:bg-teal-600 transition duration-300">
+                      Continue Shopping
+                    </span>
+                  </Link>
+                </div>
+              </form>
+            </div>
+          </main>
+        </div>
       </div>
-      <button
-        onClick={handleAddToCart}
-        className="btn-turqoise mt-5"
-        data-test-id="product-add-to-cart"
-      >
-        Add to Cart
-      </button>
     </div>
   );
-}
+};
+
+export default CheckoutPage;
+
+----------------------------------------
+
+// src/app/thankyou/page.js:
+
+import Link from 'next/link';
+import Header from '../../components/Header';
+import Head from 'next/head';
+
+const ThankYouPage = () => {
+  return (
+    <div>
+      <Head>
+        <title>Thank You</title>
+        <meta name="description" content="Thank you page after checkout." />
+      </Head>
+      <div className="container mx-auto p-6">
+        <Header />
+        <main className="mt-8 text-center">
+          <h1 className="text-2xl font-bold mb-4">Thank you for your order</h1>
+          <p className="text-lg text-gray-600 mb-6">
+            Your order has been placed successfully.
+          </p>
+          <Link href="/">
+            <span className="btn-turqoise">Continue Shopping</span>
+          </Link>
+        </main>
+      </div>
+    </div>
+  );
+};
+
+export default ThankYouPage;
 
 ----------------------------------------
 
@@ -205,48 +467,61 @@ export const useCart = () => useContext(CartContext);
 
 ----------------------------------------
 
-// tests/cart.test.ts:
+// src/components/AddToCartButton.js:
 
-// tests/cart.test.ts
-import { test, expect } from '@playwright/test';
+'use client';
 
-test.describe('Cart Flow', () => {
-  test('Add to cart, change quantity and remove from cart', async ({
-    page,
-  }) => {
-    // Ir a la página de productos
-    await page.goto('/products/1');
+import { useState } from 'react';
+import { useCart } from '../context/CartContext';
+import { TextField, Button } from '@mui/material';
 
-    // Agregar producto al carrito
-    await page.click('data-test-id=product-add-to-cart');
-    await expect(page.locator('data-test-id=cart-count')).toHaveText('1');
+export default function AddToCartButton({ product }) {
+  const [quantity, setQuantity] = useState(1);
+  const { addToCart } = useCart();
 
-    // Ir al carrito
-    await page.click('data-test-id=cart-link');
+  const handleQuantityChange = (e) => {
+    const inputValue = parseInt(e.target.value, 10) || 0; // Ensure a valid number or 0
+    setQuantity(inputValue < 1 ? 1 : inputValue); // Set to 1 if less than 1
+  };
 
-    // Esperar a que el campo de cantidad esté visible
-    const quantityInput = page.locator(
-      'input[data-test-id="product-quantity"]',
-    );
-    await quantityInput.waitFor({ state: 'visible', timeout: 12000 });
+  const handleAddToCart = () => {
+    addToCart(product, quantity);
+  };
 
-    // Cambiar la cantidad del producto en el carrito
-    console.log('Filling quantity input');
-    await quantityInput.fill('2');
-
-    // Volver a hacer clic en 'Add to Cart' para actualizar la cantidad
-    await page.click('data-test-id=product-add-to-cart');
-
-    // Verificar la cantidad actualizada en el carrito
-    await expect(
-      page.locator('data-test-id=cart-product-quantity-1'),
-    ).toHaveText('Quantity: 2');
-
-    // Eliminar producto del carrito
-    await page.click('data-test-id=cart-product-remove-1');
-    await expect(page.locator('data-test-id=cart-count')).toHaveText('0');
-  });
-});
+  return (
+    <div>
+      <div className="flex items-center mt-5 mb-4">
+        <TextField
+          type="number"
+          id="quantity"
+          name="quantity"
+          label="Quantity"
+          variant="outlined"
+          size="small"
+          value={quantity}
+          onChange={handleQuantityChange}
+          inputProps={{ min: 1 }}
+          data-test-id="product-quantity"
+          sx={{ marginRight: '1rem', width: '100px', backgroundColor: 'white' }}
+        />
+      </div>
+      <button
+        onClick={handleAddToCart}
+        className="btn-turqoise mt-5"
+        data-test-id="product-add-to-cart"
+      >
+        Add to Cart
+      </button>
+      {/* <button
+        onClick={handleAddToCart}
+        className="btn-turqoise mt-5"
+        data-test-id="update-quantity"
+      >
+        Update Quantity
+      </button> */}
+    </div>
+  );
+}
 
 ----------------------------------------
 

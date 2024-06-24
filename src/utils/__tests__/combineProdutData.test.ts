@@ -1,5 +1,3 @@
-// src/utils/__tests__/combineProductData.test.ts
-
 import { getProducts } from '../../databases/products';
 import { getCartFromCookies } from '../cookies';
 import { Product } from '../../types/Product';

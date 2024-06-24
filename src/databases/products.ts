@@ -1,5 +1,3 @@
-// src/databases/products.ts
-
 import { sql } from '../utils/connect';
 import { Product } from '../types/Product';
 
