@@ -1,20 +1,40 @@
 'use client';
 
 import Link from 'next/link';
-// import Head from 'next/head';
 import { Metadata } from 'next';
 import Header from '../../components/Header';
-import { useState } from 'react';
+import { useState, ChangeEvent, FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import { useCart } from '../../context/CartContext';
 import { removeCartFromCookies } from '../../utils/cookies';
 
-export const metadata: Metadata = {
-  title: 'Checkout Page',
-  description: 'Checkout page showing products set to be purchased.',
-};
+// export const metadata: Metadata = {
+//   title: 'Checkout Page',
+//   description: 'Checkout page showing products set to be purchased.',
+// };
 
-const CheckoutPage = () => {
+// Define types for form data and cart item
+interface FormData {
+  firstName: string;
+  lastName: string;
+  email: string;
+  address: string;
+  city: string;
+  postalCode: string;
+  country: string;
+  creditCard: string;
+  expirationDate: string;
+  securityCode: string;
+}
+
+interface CartItem {
+  id: string;
+  name: string;
+  price: number;
+  quantity: number;
+}
+
+const CheckoutPage: React.FC = () => {
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -27,22 +47,22 @@ const CheckoutPage = () => {
     expirationDate: '',
     securityCode: '',
   });
-  const [error, setError] = useState('');
+  const [error, setError] = useState<string>('');
 
   const { cart, setCart } = useCart();
   const router = useRouter();
 
-  const handleChange = (event) => {
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     // Form validation
     for (let key in formData) {
-      if (formData[key] === '') {
+      if (formData[key as keyof typeof formData] === '') {
         setError('All fields are required');
         return;
       }
@@ -70,18 +90,15 @@ const CheckoutPage = () => {
   } = formData;
 
   const totalPrice = cart
-    .reduce((total, product) => total + product.price * product.quantity, 0)
+    .reduce(
+      (total: number, product: CartItem) =>
+        total + product.price * product.quantity,
+      0,
+    )
     .toFixed(2);
 
   return (
     <div>
-      {/* <Head>
-        <title>Checkout Page</title>
-        <meta
-          name="description"
-          content="Checkout page showing products set to be purchased."
-        />
-      </Head> */}
       <div className="min-h-screen py-6 sm:py-12">
         <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
           <Header />

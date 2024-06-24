@@ -10,10 +10,10 @@ import { getProducts } from '../databases/products';
 import { Product } from '../types/Product';
 import React from 'react';
 
-export const metadata: Metadata = {
-  title: 'Products Page',
-  description: 'Page showing information of selected product',
-};
+// export const metadata: Metadata = {
+//   title: 'Products Page',
+//   description: 'Page showing information of selected product',
+// };
 
 export default async function ProductsPage() {
   const products: Product[] = await getProducts();

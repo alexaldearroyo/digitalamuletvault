@@ -1,19 +1,15 @@
 import Link from 'next/link';
 import Header from '../../components/Header';
-// import Head from 'next/head';
+import { Metadata } from 'next';
 
-export const metadata: Metadata = {
-  title: 'Thank You Page',
-  description: 'Thank you page after checkout.',
-};
+// export const metadata: Metadata = {
+//   title: 'Thank You Page',
+//   description: 'Thank you page after checkout.',
+// };
 
-const ThankYouPage = () => {
+const ThankYouPage: React.FC = () => {
   return (
     <div>
-      {/* <Head>
-        <title>Thank You</title>
-        <meta name="description" content="Thank you page after checkout." />
-      </Head> */}
       <div className="container mx-auto p-6">
         <Header />
         <main className="mt-8 text-center">

@@ -46,10 +46,10 @@ import Image from 'next/image';
 //   },
 // ];
 
-export const metadata: Metadata = {
-  title: 'Product Info',
-  description: 'Overview of all available amulets.',
-};
+// export const metadata: Metadata = {
+//   title: 'Product Info',
+//   description: 'Overview of all available amulets.',
+// };
 
 export async function generateStaticParams() {
   const products: Product[] = await getProducts();
