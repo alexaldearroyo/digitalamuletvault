@@ -14,7 +14,7 @@
       }
     ],
     "block-no-empty": null,
-    "unit-allowed-list": ["em", "rem", "s", "px", "%"],
+    "unit-allowed-list": ["em", "rem", "s", "%", "px"],
     "font-family-name-quotes": "always-where-required"
   }
 }
