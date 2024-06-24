@@ -15,6 +15,7 @@ const customJestConfig: Config = {
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
   },
   setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
+  testMatch: ['<rootDir>/src/utils/__tests__/**/*.test.ts'],
 };
 
 export default createJestConfig(customJestConfig);

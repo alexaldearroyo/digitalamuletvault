@@ -7,8 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "jest",
-    "test:e2e": "playwright test"
+    "test": "pnpm run test:jest && pnpm run test:playwright",
+    "test:jest": "jest --config jest.config.js",
+    "test:playwright": "pnpm exec playwright test"
   },
   "dependencies": {
     "@emotion/react": "^11.11.4",
