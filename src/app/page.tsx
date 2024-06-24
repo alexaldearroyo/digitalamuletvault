@@ -9,6 +9,7 @@ import ShaderImage4 from '../components/ShaderImage4';
 import { getProducts } from '../databases/products';
 import { Product } from '../types/Product';
 import React from 'react';
+import Image from 'next/image'; // Add this import statement
 
 // export const metadata: Metadata = {
 //   title: 'Products Page',
@@ -54,9 +55,11 @@ export default async function ProductsPage() {
                   </div>
                 )}
                 {!product.shaderPath && (
-                  <img
+                  <Image
                     src={`/images/product${product.id}.jpg`}
                     alt={product.name}
+                    width={300}
+                    height={300}
                     className="rounded-lg mb-4"
                   />
                 )}
