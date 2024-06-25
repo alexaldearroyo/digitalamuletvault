@@ -6,7 +6,9 @@ RUN corepack enable && corepack prepare pnpm@latest --activate
 WORKDIR /app
 # Copy the content of the project to the machine
 COPY . .
-RUN yq --inplace --output-format=json '(.devDependencies = (.devDependencies | to_entries | map(select(.key | test("^(@jest/globals|@playwright/test|@ts-safeql/eslint-plugin|jest|jest-environment-jsdom|libpg-query|prettier|prettier-plugin-embed|prettier-plugin-sql|stylelint|stylelint-config-upleveled)$") | not)) | from_entries))' package.json
+
+RUN yq --inplace --output-format=json '(.dependencies = .dependencies * (.devDependencies | to_entries | map(select(.key | test("^(autoprefixer|daisyui|tailwindcss|typescript|@types/*|eslint-config-upleveled)$"))) | from_entries)) | (.devDependencies = {})' package.json
+
 RUN pnpm install
 RUN pnpm build
 
