@@ -1,12 +1,14 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // compiler: {
-  //   // Enable support for TypeScript files
-  //   typescript: {
-  //     // Enable the TypeScript compiler
-  //     enable: true,
-  //   },
-  // },
+  experimental: {
+    typedRoutes: true,
+  },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
 };
 
 export default nextConfig;

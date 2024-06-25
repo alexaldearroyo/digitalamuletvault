@@ -1,8 +1,9 @@
 import 'server-only';
 import postgres from 'postgres';
 import { config } from 'dotenv';
+import { postgresConfig, setEnvironmentVariables } from './config.js';
 
-config();
+setEnvironmentVariables();
 
 export const sql = postgres({
   transform: {
