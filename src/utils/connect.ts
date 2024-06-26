@@ -1,11 +1,11 @@
 import 'server-only';
 import postgres from 'postgres';
 import { config } from 'dotenv';
-import { postgresConfig, setEnvironmentVariables } from './config.js';
 
-setEnvironmentVariables();
+config();
 
 export const sql = postgres({
+  ssl: Boolean(process.env.POSTGRES_URL),
   transform: {
     ...postgres.camel,
     undefined: null,

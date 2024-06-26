@@ -92,12 +92,12 @@ export default async function ProductPage({ params }: { params: Params }) {
           )}
           {!product.shaderPath && (
             <Image
-              // src={product.image}
+              src={product.image} // Add the 'image' property to the 'Product' type
               alt={product.name}
               className="mr-8"
               style={{ width: '300px', height: '300px', objectFit: 'cover' }}
               data-test-id="product-image"
-              src={''}
+              // src={''}
             />
           )}
           <div>

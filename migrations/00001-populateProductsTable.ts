@@ -5,31 +5,25 @@ const products = [
     name: 'Lucky Charm',
     description: 'A digital amulet that brings good luck.',
     price: 19.99,
-    shaderPath: 'path/to/shader1',
+    shaderPath: 'ShaderImage1',
   },
   {
     name: 'Health Talisman',
     description: 'A digital talisman that promotes health and well-being.',
     price: 29.99,
-    shaderPath: 'path/to/shader2',
+    shaderPath: 'ShaderImage2',
   },
   {
     name: 'Wealth Amulet',
     description: 'A digital amulet that attracts wealth and prosperity.',
     price: 9.99,
-    shaderPath: 'path/to/shader3',
+    shaderPath: 'ShaderImage3',
   },
   {
     name: 'Protection Sigil',
     description: 'A digital sigil that offers protection from harm.',
     price: 14.99,
-    shaderPath: 'path/to/shader4',
-  },
-  {
-    name: 'Love Token',
-    description: 'A digital token that enhances love and relationships.',
-    price: 49.99,
-    shaderPath: 'path/to/shader5',
+    shaderPath: 'ShaderImage4',
   },
 ];
 
