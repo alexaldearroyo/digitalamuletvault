@@ -1,47 +1,5 @@
 // Dockerfile:
 
-<<<<<<< HEAD
-FROM node:lts-alpine AS builder
-# Install necessary tools
-RUN apk add --no-cache libc6-compat yq --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community
-# Install pnpm
-RUN corepack enable && corepack prepare pnpm@latest --activate
-WORKDIR /app
-# Copy the content of the project to the machine
-COPY . .
-
-RUN yq --inplace --output-format=json '(.dependencies = .dependencies * (.devDependencies | to_entries | map(select(.key | test("^(autoprefixer|daisyui|tailwindcss|typescript|@types/*|eslint-config-upleveled)$"))) | from_entries)) | (.devDependencies = {})' package.json
-
-RUN pnpm install
-RUN pnpm build
-
-# Multi-stage builds: runner stage
-FROM node:lts-alpine AS runner
-# Install necessary tools
-RUN apk add bash postgresql
-RUN corepack enable && corepack prepare pnpm@latest --activate
-WORKDIR /app
-
-# Copy built app
-COPY --from=builder /app/.next ./.next
-
-# Copy only necessary files to run the app (minimize production app size, improve performance)
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/migrations ./migrations
-COPY --from=builder /app/public ./public
-COPY --from=builder /app/package.json ./
-COPY --from=builder /app/next.config.js ./
-
-# Copy start script and make it executable
-COPY --from=builder /app/scripts ./scripts
-RUN chmod +x /app/scripts/fly-io-start.sh
-
-CMD ["./scripts/fly-io-start.sh"]
-
-----------------------------------------
-
-// src/utils/connect.ts:
-=======
 # Dockerfile
 
 FROM node:lts-alpine AS builder
@@ -57,6 +15,10 @@ WORKDIR /app
 # Copy the project content
 COPY . .
 
+<<<<<<< HEAD
+RUN yq --inplace --output-format=json '(.dependencies = .dependencies * (.devDependencies | to_entries | map(select(.key | test("^(autoprefixer|daisyui|tailwindcss|typescript|@types/*|eslint-config-upleveled)$"))) | from_entries)) | (.devDependencies = {})' package.json
+
+=======
 # Combine dependencies
 RUN yq --inplace --output-format=json '(.dependencies = .dependencies * (.devDependencies | to_entries | map(select(.key | test("^(autoprefixer|daisyui|tailwindcss|typescript|@types/*|eslint-config-upleveled)$"))) | from_entries)) | (.devDependencies = {})' package.json
 
@@ -64,6 +26,7 @@ RUN yq --inplace --output-format=json '(.dependencies = .dependencies * (.devDep
 ENV BUILD_ENV=true
 
 # Install dependencies and build the application
+>>>>>>> Deployment
 RUN pnpm install
 RUN pnpm build
 
@@ -338,6 +301,18 @@ pnpm migrate up
 
 ----------------------------------------
 
+// scripts/migrate.sh:
+
+#!/bin/bash
+
+# Ensure the environment variables are set
+source /app/.env
+
+# Run the migrations
+pnpm migrate up
+
+----------------------------------------
+
 // src/app/globals.css:
 
 @tailwind base;
@@ -490,7 +465,7 @@ export default async function ProductsPage() {
                       )}
                     </div>
                   )}
-                  {!product.shaderPath && (
+                  {/* {!product.shaderPath && (
                     <Image
                       src={`/images/product${product.id}.jpg`}
                       alt={product.name}
@@ -498,7 +473,7 @@ export default async function ProductsPage() {
                       height={300}
                       className="rounded-lg mb-4"
                     />
-                  )}
+                  )} */}
                   <h2>{product.name}</h2>
                 </div>
               </Link>
@@ -636,58 +611,9 @@ export default async function ProductPage({ params }: { params: Params }) {
 ----------------------------------------
 
 // src/components/ShaderImage1.js:
->>>>>>> Deployment
 
-import 'server-only';
-import postgres from 'postgres';
-import { config } from 'dotenv';
-import { postgresConfig, setEnvironmentVariables } from './config.js';
+'use client';
 
-<<<<<<< HEAD
-setEnvironmentVariables();
-
-export const sql = postgres({
-  transform: {
-    ...postgres.camel,
-    undefined: null,
-  },
-});
-
-----------------------------------------
-
-// src/utils/config.js:
-
-// src/utils/config.js
-
-import { config } from 'dotenv-safe';
-import postgres from 'postgres';
-
-export const postgresConfig = {
-  ssl: Boolean(process.env.POSTGRES_URL),
-  transform: {
-    ...postgres.camel,
-    undefined: null,
-  },
-};
-
-export function setEnvironmentVariables() {
-  if (process.env.NODE_ENV === 'production' || process.env.CI) {
-    // Set standard environment variables for Postgres.js from
-    // Vercel environment variables
-    if (process.env.POSTGRES_URL) {
-      process.env.PGHOST = process.env.POSTGRES_HOST;
-      process.env.PGDATABASE = process.env.POSTGRES_DATABASE;
-      process.env.PGUSERNAME = process.env.POSTGRES_USER;
-      process.env.PGPASSWORD = process.env.POSTGRES_PASSWORD;
-    }
-    return;
-  }
-
-  // Avoid connecting to the database during the build
-  if (process.env.NODE_ENV !== 'build') {
-    config();
-  }
-=======
 import { useRef, useEffect } from 'react';
 
 const vertexShaderSource = `
@@ -1399,40 +1325,6 @@ export interface Product {
 
 ----------------------------------------
 
-// src/utils/config.js:
-
-// src/utils/config.js
-
-import { config } from 'dotenv-safe';
-import postgres from 'postgres';
-
-export const postgresConfig = {
-  ssl: Boolean(process.env.POSTGRES_URL),
-  transform: {
-    ...postgres.camel,
-    undefined: null,
-  },
-};
-
-export function setEnvironmentVariables() {
-  if (process.env.NODE_ENV === 'production' || process.env.CI) {
-    if (process.env.POSTGRES_URL) {
-      process.env.PGHOST = process.env.POSTGRES_HOST;
-      process.env.PGDATABASE = process.env.POSTGRES_DATABASE;
-      process.env.PGUSERNAME = process.env.POSTGRES_USER;
-      process.env.PGPASSWORD = process.env.POSTGRES_PASSWORD;
-    }
-    return;
-  }
-
-  // Evitar conexión a la base de datos durante el build
-  if (!process.env.BUILD_ENV) {
-    config();
-  }
-}
-
-----------------------------------------
-
 // src/utils/connect.ts:
 
 import 'server-only';
@@ -1442,6 +1334,7 @@ import { config } from 'dotenv';
 config();
 
 export const sql = postgres({
+  ssl: Boolean(process.env.POSTGRES_URL),
   transform: {
     ...postgres.camel,
     undefined: null,
@@ -1492,8 +1385,187 @@ export const sql = postgres({
   "exclude": [
     "node_modules"
   ]
->>>>>>> Deployment
 }
+
+----------------------------------------
+
+// .github/workflows/ci-cd.yml:
+
+name: CI
+on: push
+
+jobs:
+  ci:
+    name: Jest Unit Tests, Linting, Playwright End to End Tests
+    runs-on: ubuntu-latest # or macos-latest, windows-latest
+    timeout-minutes: 30
+    # Update env variables with your own database credentials
+    env:
+      PGHOST: localhost
+      PGDATABASE: test
+      PGUSERNAME: test
+      PGPASSWORD: test
+    steps:
+      - name: Start preinstalled PostgreSQL on Ubuntu
+        run: |
+          sudo systemctl start postgresql.service
+          pg_isready
+      - name: Create database user
+        run: |
+          sudo -u postgres psql --command="CREATE USER $PGUSERNAME PASSWORD '$PGPASSWORD'" --command="\du"
+      - name: Create database and allow user
+        run: |
+          sudo -u postgres createdb --owner=$PGUSERNAME $PGDATABASE
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 'latest'
+
+      # Use the official setup-node action (sets up Node.js):
+      # https://github.com/actions/setup-node
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install
+      - name: Jest unit tests
+        run: pnpm jest
+      - name: Run database migrations
+        run: pnpm migrate up
+      - name: Build Next.js app (types needed for TSC and ESLint)
+        run: pnpm build
+      - name: Check TypeScript Types
+        run: pnpm tsc
+      - name: Lint with ESLint
+        run: pnpm eslint . --max-warnings 0
+      - name: Lint with Stylelint
+        run: pnpm stylelint '**/*.{css,scss,less,js,tsx}'
+
+      # Cache and install Playwright browser binaries, modified version of:
+      # https://github.com/microsoft/playwright/issues/7249#issuecomment-1154603556
+      # https://github.com/microsoft/playwright/issues/7249#issuecomment-1385567519
+      # https://playwrightsolutions.com/playwright-github-action-to-cache-the-browser-binaries/
+      - name: Get installed Playwright version for cache key
+        run: echo "PLAYWRIGHT_VERSION=$(yq eval '.version' --output-format=yaml ./node_modules/@playwright/test/package.json)" >> $GITHUB_ENV
+      - name: Cache Playwright browser binaries
+        uses: actions/cache@v4
+        id: playwright-browser-cache
+        with:
+          path: |
+            ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ env.PLAYWRIGHT_VERSION }}
+      - name: Install Playwright browsers only on cache miss
+        run: pnpm playwright install --with-deps chromium
+        if: steps.playwright-browser-cache.outputs.cache-hit != 'true'
+
+      - name: Run tests
+        run: pnpm playwright test
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-screenshots-videos
+          path: playwright/test-results/
+  cd:
+    name: Deploy to Fly.io
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    needs: ci
+    if: github.ref == 'refs/heads/main'
+    env:
+      FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+      - run: flyctl deploy --remote-only
+
+----------------------------------------
+
+// .env:
+
+PGHOST=localhost
+PGPORT=5432
+PGDATABASE=nextjs_ecommerce_store
+PGUSERNAME=nextjs_ecommerce_store
+PGPASSWORD=nextjs_ecommerce_store
+
+----------------------------------------
+
+// .env.example:
+
+PGHOST=
+PGPORT=
+PGDATABASE=
+PGUSERNAME=
+PGPASSWORD=
+
+----------------------------------------
+
+// fly.toml:
+
+app = "digital-amulet-vault"
+primary_region = "otp"
+
+[mounts]
+  source = "postgres"
+  destination = "/postgres-volume"
+
+[env]
+  PORT = "8080"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+
+----------------------------------------
+
+// ley.config.mjs:
+
+// ley.config.mjs
+import {
+  postgresConfig,
+  setEnvironmentVariables,
+} from './src/utils/config.mjs';
+
+setEnvironmentVariables();
+
+export default {
+  ...postgresConfig,
+};
+
+----------------------------------------
+
+// next.config.mjs:
+
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  experimental: {
+    typedRoutes: true,
+  },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
+};
+
+export default nextConfig;
+
+----------------------------------------
+
+// next-env.d.ts:
+
+/// <reference types="next" />
+/// <reference types="next/image-types/global" />
+/// <reference types="next/navigation-types/compat/navigation" />
+
+// NOTE: This file should not be edited
+// see https://nextjs.org/docs/basic-features/typescript for more information.
 
 ----------------------------------------
 

@@ -13,10 +13,6 @@ WORKDIR /app
 # Copy the project content
 COPY . .
 
-<<<<<<< HEAD
-RUN yq --inplace --output-format=json '(.dependencies = .dependencies * (.devDependencies | to_entries | map(select(.key | test("^(autoprefixer|daisyui|tailwindcss|typescript|@types/*|eslint-config-upleveled)$"))) | from_entries)) | (.devDependencies = {})' package.json
-
-=======
 # Combine dependencies
 RUN yq --inplace --output-format=json '(.dependencies = .dependencies * (.devDependencies | to_entries | map(select(.key | test("^(autoprefixer|daisyui|tailwindcss|typescript|@types/*|eslint-config-upleveled)$"))) | from_entries)) | (.devDependencies = {})' package.json
 
@@ -24,7 +20,6 @@ RUN yq --inplace --output-format=json '(.dependencies = .dependencies * (.devDep
 ENV BUILD_ENV=true
 
 # Install dependencies and build the application
->>>>>>> Deployment
 RUN pnpm install
 RUN pnpm build
 

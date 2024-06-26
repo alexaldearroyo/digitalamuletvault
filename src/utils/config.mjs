@@ -1,9 +1,4 @@
-<<<<<<< HEAD:src/utils/config.js
-// src/utils/config.js
-
-=======
 // src/utils/config.mjs
->>>>>>> Deployment:src/utils/config.mjs
 import { config } from 'dotenv-safe';
 import postgres from 'postgres';
 
@@ -26,13 +21,8 @@ export function setEnvironmentVariables() {
     return;
   }
 
-<<<<<<< HEAD:src/utils/config.js
   // Avoid connecting to the database during the build
-  if (process.env.NODE_ENV !== 'build') {
-=======
-  // Evitar conexión a la base de datos durante el build
   if (!process.env.BUILD_ENV) {
->>>>>>> Deployment:src/utils/config.mjs
     config();
   }
 }
