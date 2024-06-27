@@ -9,16 +9,27 @@ import { Product } from '../types/Product';
 import React from 'react';
 import Image from 'next/image';
 
-export default async function ProductsPage() {
+export async function getServerSideProps() {
   const products: Product[] = await getProducts();
+  return {
+    props: {
+      products,
+    },
+  };
+}
 
+type ProductsPageProps = {
+  products: Product[];
+};
+
+const ProductsPage: React.FC<ProductsPageProps> = ({ products }) => {
   return (
     <div>
       <div className="container mx-auto p-6">
         <Header />
         <div className="product-list">
           {products.map((product) => {
-            console.log(product.shaderPath); // Agrega esta línea para verificar el valor de shaderPath
+            console.log(product.shaderPath); // Verificar valor de shaderPath
             return (
               <Link
                 href={`/products/${product.id}`}
@@ -60,4 +71,6 @@ export default async function ProductsPage() {
       </div>
     </div>
   );
-}
+};
+
+export default ProductsPage;
