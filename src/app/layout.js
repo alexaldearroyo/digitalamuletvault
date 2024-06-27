@@ -5,6 +5,7 @@ import { fas } from '@fortawesome/free-solid-svg-icons';
 import { fab } from '@fortawesome/free-brands-svg-icons';
 import { CartProvider } from '../context/CartContext';
 import Footer from '../components/Footer';
+import Header from '../components/Header';
 
 library.add(fas, fab);
 
@@ -22,6 +23,7 @@ export default function RootLayout({ children }) {
         className={`${inter.className} min-w-screen min-h-screen flex flex-col`}
       >
         <div className="flex-grow">
+          {/* <Header /> */}
           <CartProvider>{children}</CartProvider>
         </div>
         <Footer />

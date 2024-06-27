@@ -41,7 +41,8 @@
     "secure-json-parse": "^2.7.0",
     "three": "^0.165.0",
     "ts-node": "^10.9.2",
-    "tsx": "^4.15.7"
+    "tsx": "^4.15.7",
+    "webpack": "^5.92.1"
   },
   "devDependencies": {
     "@playwright/test": "^1.44.1",
