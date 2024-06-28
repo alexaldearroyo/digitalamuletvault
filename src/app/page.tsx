@@ -1,14 +1,14 @@
-import { GetServerSideProps } from 'next';
+'use client'; // Esto asegura que el archivo se trate como un componente de cliente
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  return {
-    redirect: {
-      destination: '/productslist',
-      permanent: false,
-    },
-  };
-};
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function HomePage() {
+  const router = useRouter();
+
+  useEffect(() => {
+    router.push('/productslist');
+  }, [router]);
+
   return null;
 }
