@@ -17,6 +17,7 @@ export default async function ProductsPage() {
       <div className="container mx-auto p-6">
         <Header />
         <div className="product-list">
+          TEST
           {products.map((product) => {
             console.log(product.shaderPath); // Agrega esta línea para verificar el valor de shaderPath
             return (
