@@ -62,7 +62,11 @@ const ProductsPage: React.FC = async () => {
     products = await sql`SELECT * FROM products`;
   } catch (error) {
     console.error('Error fetching products:', error);
-    return <p>Error fetching products</p>;
+    return (
+      <div className="container mx-auto p-6 pt-0">
+        <p>Error fetching products</p>
+      </div>
+    );
   }
 
   if (!products || products.length === 0) {
