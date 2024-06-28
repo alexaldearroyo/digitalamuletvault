@@ -38,7 +38,7 @@ export default function Header() {
           className="ml-3 text-yellow-500 hover:text-yellow-50 no-underline"
           data-test-id="products-link"
         >
-          <span>Products</span>
+          <span>Products Test</span>
         </Link>
       </div>
     </header>
