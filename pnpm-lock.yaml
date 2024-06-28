@@ -59,9 +59,9 @@ importers:
       mini-css-extract-plugin:
         specifier: ^2.9.0
         version: 2.9.0(webpack@5.92.1)
-      mongose:
-        specifier: 0.0.2-security
-        version: 0.0.2-security
+      mongoose:
+        specifier: 0.0.2
+        version: 0.0.2
       next:
         specifier: 14.2.4
         version: 14.2.4(@babel/core@7.24.7)(@playwright/test@1.45.0)(babel-plugin-macros@3.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -2831,8 +2831,9 @@ packages:
     resolution: {integrity: sha512-FEZDdUFb88hgdnsfAPa4VxcPVOd+8GyZ2jsI965im5bjBlBYhrvXuTqLka/UHa6YdUNN/kZBsVgofhZ3322AJw==}
     engines: {node: '>=6'}
 
-  mongose@0.0.2-security:
-    resolution: {integrity: sha512-XJUBQHhC/12+hWtrcB1Ww+gkxSzbxg4VdjpNlBQGvFoyPm1bErhA+3n/IkWbGCkavFB1OSycpvpCRphPsZXgLw==}
+  mongoose@0.0.2:
+    resolution: {integrity: sha512-CzB2+l1DcfRUbyOUT/G27ht6HeyNMSbN5P95RbP+/btggkmnCEkeAphunwkDDoyjw1DgIlwtClFVqhahCev7ig==}
+    engines: {'0': node}
 
   mri@1.2.0:
     resolution: {integrity: sha512-tzzskb3bG8LvYGFF/mDTpq3jpI6Q9wc3LEmBaghu+DdCssd1FakN7Bc0hVNmEyGq1bq3RgfkCb3cmQLpNPOroA==}
@@ -7143,7 +7144,7 @@ snapshots:
 
   mk-dirs@3.0.0: {}
 
-  mongose@0.0.2-security: {}
+  mongoose@0.0.2: {}
 
   mri@1.2.0: {}
 
