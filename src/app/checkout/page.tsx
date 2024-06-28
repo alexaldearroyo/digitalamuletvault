@@ -99,9 +99,9 @@ const CheckoutPage: React.FC = () => {
 
   return (
     <div>
-      <div className="min-h-screen py-6 sm:py-12">
-        <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
-          <Header />
+      <div className="min-h-screen py-6 sm:py-12 pt-0">
+        <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 pt-0">
+          {/* <Header /> */}
         </div>
         <div className="flex items-start justify-center mt-0 sm:mt-2">
           <main className="mt-8 w-full max-w-lg bg-yellow-50 bg-opacity-60 rounded-lg shadow-md">

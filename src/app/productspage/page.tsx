@@ -27,10 +27,10 @@ export default async function ProductsPage() {
 
   return (
     <div>
-      <div className="container mx-auto p-6">
-        <Header />
+      <div className="container mx-auto p-6 pt-0">
+        {/* <Header /> */}
         <div className="product-list">
-          TEST 280624/1234
+          TEST 280624/1258
           {products.map((product) => (
             <Link
               href={`/products/${product.id}`}

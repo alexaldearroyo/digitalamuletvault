@@ -30,8 +30,8 @@ const CartPage: React.FC = () => {
 
   return (
     <div>
-      <div className="container mx-auto p-6">
-        <Header />
+      <div className="container mx-auto p-6 pt-0">
+        {/* <Header /> */}
         <div className="cart bg-yellow-50 bg-opacity-75 rounded-lg shadow-md p-8">
           {cart.length === 0 ? (
             <p className="text-center text-gray-600">

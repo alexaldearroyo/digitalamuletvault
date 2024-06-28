@@ -71,8 +71,8 @@ export default async function ProductPage({ params }: { params: Params }) {
         itle>Product Info</title>
         <meta name="description" content="Overview of all available amulets." />
       </Head> */}
-      <div className="container mx-auto p-6">
-        <Header />
+      <div className="container mx-auto p-6 pt-0">
+        {/* <Header /> */}
         <div className="rounded-lg bg-yellow-50 bg-opacity-60 overflow-hidden shadow-md p-6 flex">
           {product.shaderPath && (
             <div className="mr-8">

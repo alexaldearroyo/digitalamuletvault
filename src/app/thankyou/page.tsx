@@ -10,7 +10,7 @@ import { Metadata } from 'next';
 const ThankYouPage: React.FC = () => {
   return (
     <div>
-      <div className="container mx-auto p-6">
+      <div className="container mx-auto p-6 pt-0">
         <Header />
         <main className="mt-8 text-center">
           <h1 className="text-2xl font-bold mb-4">Thank you for your order</h1>
