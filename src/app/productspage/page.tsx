@@ -63,14 +63,10 @@ const ProductsPage: React.FC = async () => {
   } catch (error) {
     console.error('Error fetching products:', error);
     return (
-      <div className="container mx-auto p-6 pt-0">
+      <div className="container mx-auto p-7 pt-0">
         <p>Error fetching products</p>
       </div>
     );
-  }
-
-  if (!products || products.length === 0) {
-    return <p>No products found</p>;
   }
 
   return (

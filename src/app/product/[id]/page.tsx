@@ -62,7 +62,11 @@ export default async function ProductPage({ params }: { params: Params }) {
   const product: Product | null = await getProductById(Number(params.id));
 
   if (!product) {
-    return <p>Product not found</p>;
+    return (
+      <div className="container mx-auto p-7 pt-0">
+        <p>Product not found</p>
+      </div>
+    );
   }
 
   return (
