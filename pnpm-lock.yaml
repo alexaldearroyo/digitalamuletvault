@@ -108,6 +108,9 @@ importers:
       '@types/babel__core':
         specifier: ^7.20.5
         version: 7.20.5
+      '@types/babel__generator':
+        specifier: ^7.6.8
+        version: 7.6.8
       '@types/dotenv-safe':
         specifier: ^8.1.6
         version: 8.1.6
@@ -118,7 +121,7 @@ importers:
         specifier: ^9.0.0
         version: 9.0.0(@babel/core@7.24.7)(@playwright/test@1.45.0)(babel-plugin-macros@3.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@types/node':
-        specifier: ^20.14.8
+        specifier: ^20.14.9
         version: 20.14.9
       '@types/react':
         specifier: ^18.3.3

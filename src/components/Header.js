@@ -17,7 +17,7 @@ export default function Header() {
   return (
     <header className="mb-8">
       <div className="flex justify-between items-center">
-        <h1 className="text-4xl sm:text-3xl font-bold mb-0">
+        <h1 className="text-4xl sm:text-2xl font-bold mb-0">
           The Digital Amulet Vault
         </h1>
         <Link href="/cart" className="ml-4" data-test-id="cart-link">
