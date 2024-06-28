@@ -23,7 +23,6 @@ export default function RootLayout({ children }) {
         className={`${inter.className} min-w-screen min-h-screen flex flex-col`}
       >
         <div className="flex-grow">
-          {/* <Header /> */}
           <CartProvider>{children}</CartProvider>
         </div>
         <Footer />
