@@ -14,13 +14,14 @@ export default async function ProductsPage() {
 
   try {
     products = await getProducts();
-    console.log(products); // Verifica que los productos se obtienen correctamente
+    console.log('Products fetched:', products);
   } catch (error) {
     console.error('Error fetching products:', error);
     return <p>Error fetching products</p>;
   }
 
   if (!products || products.length === 0) {
+    console.log('No products found');
     return <p>No products found</p>;
   }
 
