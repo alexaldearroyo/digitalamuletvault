@@ -20,9 +20,5 @@ export function setEnvironmentVariables() {
     }
     return;
   }
-
-  // Avoid connecting to the database during the build
-  if (!process.env.BUILD_ENV) {
-    config();
-  }
+  config();
 }

@@ -1,4 +1,3 @@
-// ley.config.mjs
 import {
   postgresConfig,
   setEnvironmentVariables,
@@ -6,6 +5,4 @@ import {
 
 setEnvironmentVariables();
 
-export default {
-  ...postgresConfig,
-};
+export default postgresConfig;

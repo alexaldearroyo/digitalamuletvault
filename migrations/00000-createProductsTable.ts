@@ -1,4 +1,4 @@
-import sql, { Sql } from 'postgres';
+import { Sql } from 'postgres';
 
 export async function up(sql: Sql) {
   await sql`

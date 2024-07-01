@@ -1,23 +1,26 @@
-// src/utils/connect.ts
-
 import 'server-only';
-import postgres from 'postgres';
-import { config } from 'dotenv';
+import { unstable_noStore as noStore } from 'next/cache';
+import postgres, { Sql } from 'postgres';
+import postgresConfig from '../../ley.config.mjs';
+import { setEnvironmentVariables } from './config.mjs';
 
-config();
+setEnvironmentVariables();
 
-export const sql = postgres({
-  host: process.env.PGHOST,
-  port: Number(process.env.PGPORT),
-  database: process.env.PGDATABASE,
-  username: process.env.PGUSERNAME,
-  password: process.env.PGPASSWORD,
-  ssl:
-    process.env.NODE_ENV === 'production'
-      ? { rejectUnauthorized: false }
-      : undefined,
-  transform: {
-    ...postgres.camel,
-    undefined: null,
-  },
-});
+declare module globalThis {
+  let postgresSqlClient: Sql;
+}
+
+function connectOneTimeToDatabase() {
+  if (!('postgresSqlClient' in globalThis)) {
+    globalThis.postgresSqlClient = postgres(postgresConfig);
+  }
+
+  return ((
+    ...sqlParameters: Parameters<typeof globalThis.postgresSqlClient>
+  ) => {
+    noStore();
+    return globalThis.postgresSqlClient(...sqlParameters);
+  }) as typeof globalThis.postgresSqlClient;
+}
+
+export const sql = connectOneTimeToDatabase();
