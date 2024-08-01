@@ -14,11 +14,14 @@ type ProductLinkProps = {
 };
 
 const ProductLink: React.FC<ProductLinkProps> = ({ product }) => {
-  const href = `/product/${product.id}` as const;
+  const href = `/product/${product.id}`;
 
   return (
     <Link
-      href={href}
+      href={{
+        pathname: '/product/[id]',
+        query: { id: product.id },
+      }}
       key={product.id}
       data-test-id={`product-${product.id}`}
       className="product-card"
@@ -72,7 +75,7 @@ const ProductsPage: React.FC = async () => {
   return (
     <div className="container mx-auto p-6 pt-0">
       <div className="product-list">
-        TEST 280624/1258
+        {/* TEST 280624/1258 */}
         {products.map((product) => (
           <ProductLink product={product} key={product.id} />
         ))}
