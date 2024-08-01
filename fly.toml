@@ -1,4 +1,4 @@
-app = "digital-amulet-vault"
+app = "digitalamuletvault"
 primary_region = "otp"
 
 [mounts]

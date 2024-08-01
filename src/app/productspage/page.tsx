@@ -1,5 +1,4 @@
-// src/app/productspage/page.tsx
-
+import Link from 'next/link';
 import { sql } from '../../utils/connect';
 import { Product } from '../../types/Product';
 import ShaderImage1 from '../../components/ShaderImage1';
@@ -7,27 +6,21 @@ import ShaderImage2 from '../../components/ShaderImage2';
 import ShaderImage3 from '../../components/ShaderImage3';
 import ShaderImage4 from '../../components/ShaderImage4';
 import Image from 'next/image';
-import Link from 'next/link';
 
 type ProductLinkProps = {
   product: Product;
 };
 
 const ProductLink: React.FC<ProductLinkProps> = ({ product }) => {
-  const href = `/product/${product.id}`;
-
   return (
     <Link
-      href={{
-        pathname: '/product/[id]',
-        query: { id: product.id },
-      }}
+      href={`/product/${product.id.toString()}`} // Construye la URL directamente
       key={product.id}
       data-test-id={`product-${product.id}`}
       className="product-card"
     >
       <div style={{ cursor: 'pointer' }}>
-        {product.shaderPath && (
+        {product.shaderPath ? (
           <div className="rounded-lg overflow-hidden">
             {product.shaderPath === 'ShaderImage1' && (
               <ShaderImage1 width={300} height={300} />
@@ -42,8 +35,7 @@ const ProductLink: React.FC<ProductLinkProps> = ({ product }) => {
               <ShaderImage4 width={300} height={300} />
             )}
           </div>
-        )}
-        {!product.shaderPath && (
+        ) : (
           <Image
             src={product.image}
             alt={product.name}
@@ -62,7 +54,7 @@ const ProductsPage: React.FC = async () => {
   let products: Product[] = [];
 
   try {
-    products = await sql`SELECT * FROM products`;
+    products = await sql<Product[]>`SELECT * FROM products`;
   } catch (error) {
     console.error('Error fetching products:', error);
     return (
@@ -75,7 +67,6 @@ const ProductsPage: React.FC = async () => {
   return (
     <div className="container mx-auto p-6 pt-0">
       <div className="product-list">
-        {/* TEST 280624/1258 */}
         {products.map((product) => (
           <ProductLink product={product} key={product.id} />
         ))}
