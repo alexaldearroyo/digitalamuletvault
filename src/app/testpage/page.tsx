@@ -1,8 +1,6 @@
-'use client';
-
-import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { getAllProducts } from '../../databases/products';
 import { Product } from '../../types/Product';
 import ShaderImage1 from '../../components/ShaderImage1';
 import ShaderImage2 from '../../components/ShaderImage2';
@@ -52,56 +50,36 @@ const ProductLink: React.FC<ProductLinkProps> = ({ product }) => {
   );
 };
 
-const ProductsPage: React.FC = () => {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+const ProductsPage: React.FC = async () => {
+  try {
+    const products: Product[] = await getAllProducts();
+    console.log('Obtained products:', products);
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await fetch('/api/products');
-        if (!response.ok) {
-          throw new Error('Failed to fetch products');
-        }
-        const data = await response.json();
-        setProducts(data);
-      } catch (err) {
-        console.error('Error fetching products:', err);
-        setError('Error fetching products');
-      } finally {
-        setLoading(false);
-      }
-    };
+    if (!products || products.length === 0) {
+      console.log('Products not found');
+    }
 
-    fetchProducts();
-  }, []);
-
-  if (loading) {
     return (
-      <div className="flex items-center justify-center h-screen">
-        <p>Loading products...</p>
+      <div className="container mx-auto p-6 pt-0">
+        <div className="product-list">
+          {products.length === 0 ? (
+            <p>No products found.</p>
+          ) : (
+            products.map((product) => (
+              <ProductLink product={product} key={product.id} />
+            ))
+          )}
+        </div>
+      </div>
+    );
+  } catch (error) {
+    console.error('Error fetching products:', error);
+    return (
+      <div className="container mx-auto p-7 pt-0">
+        <p>Error fetching products</p>
       </div>
     );
   }
-
-  if (error) {
-    return <p>{error}</p>;
-  }
-
-  return (
-    <div className="container mx-auto p-6 pt-0">
-      <div className="product-list">
-        {products.length === 0 ? (
-          <p>No products found.</p>
-        ) : (
-          products.map((product) => (
-            <ProductLink product={product} key={product.id} />
-          ))
-        )}
-      </div>
-    </div>
-  );
 };
 
 export default ProductsPage;
